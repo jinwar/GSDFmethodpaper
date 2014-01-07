@@ -72,50 +72,91 @@ The first step is to isolate the signal that we are interested in time domain. I
 \[
 C(t) = S_1 \star W_S S_2
 \]
-$C(t)$ contains the delay or lag information of all coherent signals, with the peak corresponding roughly to a wide-band group delay between the two stations, with a center frequency defined by the dominant energy in the data, typically around 30 mHz for teleseismic Rayleigh waves.  We further isolate the dominant energy in the cross-correlation function in the time domain by applying a Hanning window around the peak of the cross-correlation function, producing $W_CC(t)$. The window function we applied here has a length of 200s.
+$C(t)$ contains the delay or lag information of all coherent signals, with the peak corresponding roughly to a wide-band group delay between the two stations, with a center frequency defined by the dominant energy in the data, typically around 30 mHz for teleseismic Rayleigh waves. We further isolate the dominant energy in the cross-correlation function in the time domain by applying a Hanning window around the peak of the cross-correlation function, producing $W_cC(t)$. The window function we applied here has a length of 200s.
 
-We then isolate the signals of interest in the frequency domain by convolving a sequence of Gaussian, narrow-band filters with $W_cC(t)$, forming a set of filtered correlagrams $F_i(\omega)\star ast W_c C(t)$, where $F_i(\omega)$ corresponds to each filter at center frequency $\omega_i$ (Figure 3).  These filtered correlagrams provide the frequency-dependent group and phase delays between the two stations, as well as the coherency between the two signals.  These frequency-dependent delays characterize the relative dispersion that has occurred between the two stations, and they provide the fundamental data for determining the phase velocity characteristics of the wavefield and the structure being sampled.  In the application that presenting here, we are interested in characterizing the phase-velocity of fundamental-mode surface waves in the 510-5200 mHz band, and so we apply a sequence of xxx narrow-band, zero-phase Gaussian filters with the band-width about 10\% of the center frequency.
+We then isolate the signals of interest in the frequency domain by convolving a sequence of Gaussian, narrow-band filters with $W_cC(t)$, forming a set of filtered correlagrams $F_i(\omega_i) \ast W_c C(t)$, where $F_i(\omega_i)$ corresponds to each filter at center frequency $\omega_i$ (Figure~\ref{fig:cswaveform}). These filtered correlagrams provide information of the frequency-dependent group and phase delays between the two stations, as well as the coherence between the two signals. The frequency-dependent delays characterize the relative dispersion that has occurred along the ray path, and provide the fundamental data for determining the phase velocity characteristics of the wavefield and the structure being sampled.  In the application that presenting here, we are interested in characterizing the phase-velocity of fundamental-mode surface waves in the 10-50 mHz band, and so we apply a sequence of 8 narrow-band, zero-phase Gaussian filters with the band-width about 10\% of the center frequency.
 
 \begin{figure}
 	\includegraphics[width=8.5cm]{pics/two_sta_waveform/cs_waveforms.pdf}
-	\caption{Two sample waveforms of the same earthquake as in Figure 1 from station W17A ($S_1$) and W18A ($S_2$). The two stations are 89km apart and the waveforms are almost identical. The lower panel shows the windowed waveform to isolate the energy of fundamental Rayleigh wave.}
-	\label{fig:twostawaveform}
+	\caption{Crossgrams of the waveforms in Figure 2. From top to bottom panels demonstrate the processing procedures described in the Methodology section: cross-correlating the waveforms from the two stations, windowing the cross-correlagrams, narrow-band filtering, and fitting a five-parameter wavelet. The narrow-band filter applied has a center frequency of 25mHz.}
+	\label{fig:cswaveform}
 \end{figure}
 
 The narrow-band filtered cross-correlation function can be well approximated by a five-parameter wavelet which is the product of a Gaussian envelope and a cosine function:
 \[
 F_i \ast W_c C(t) \approx A Ga [\sigma(t-t_g)]cos[\omega(t-t_p)]
 \]
-(Gee and Jordan, 1992).  In this equation, $t_g$ and $t_p$ represent the frequency-dependent group and phase delays between the two stations, respectively, Ga is the Gaussian function, A is a positive scale factor, $\sigma$ is half-bandwidth and $\omega$ is the center frequency of the narrow-band waveform.
+\cite{Gee:1992ww}.  In this equation, $t_g$ and $t_p$ represent the frequency-dependent group and phase delays between the two stations, respectively, $Ga$ is the Gaussian function, $A$ is a positive scale factor, $\sigma$ is the half-bandwidth and $\omega$ is the center frequency of the narrow-band waveform.
 
-The raw phase and group delays can then be corrected for bias introduced by the time-domain windowing steps.  As pointed out by Gee and Jordan [1992], windowing of the wide-band cross-correlation function around it’s peak introduces a bias in the frequency-dependent phase delays that can be estimated as:
+The raw phase and group delays can then be corrected for bias introduced by the time-domain windowing steps.  As pointed out by Gee and Jordan \shortcite{1992}, windowing of the wide-band cross-correlation function around its peak introduces a bias in the frequency-dependent phase delays that can be estimated as:
 \[
-\delta t_{err} = (1-\xi)(\frac{\omega_f - \omega_c}{\omega_f}(t_c - \delta \tau_g(\omega_f))
+\delta t_{err} = (1-\xi)\left[\frac{\omega_i - \omega_c}{\omega_i}\left(t_c - t_g(\omega_i)\right)\right]
 \]
-where $\xi$ is a time location parameter usually close to 1, $\omega_f$ is the frequency being measured, $\omega_c$ is the wide-band center frequency, $t_c$ is center of the window function, $\delta \tau_g(\omega_f)$ is the group delay of frequency.  This bias can be significant for those frequencies that are much lower than the center frequency, but can be minimized by iterating on the windowing and fitting process.  For frequencies that are lower than 16mHz (60s), we utilize the initial estimate of dtg to re-center the window function prior to narrow-band filtering these frequencies. This significantly reduces the difference between?  and ? thereby minimizing the bias correction.
+where $\xi$ is a time location parameter usually close to 1, $\omega_i$ is the frequency being measured, $\omega_c$ is the wide-band center frequency, $t_c$ is center of the window function, $t_g(\omega_i)$ is the group delay of frequency.  This bias can be significant for those frequencies that are much lower than the center frequency, but can be minimized by iterating on the windowing and filtering process.  In this study, for frequencies that are lower than 16mHz (60s), we utilize the initial estimate of tg to re-center the window function prior to narrow-band filtering these frequencies. This significantly reduces $\delta t_{err}$ thereby minimizing the bias correction.
 
-The raw phase delays are then checked and corrected for cycle-skipping.  This is a particular important problem for the higher-frequency observations, and/or for station pairs with relatively large source-receiver separation, for which the phase delay between the two stations may approach or exceed multiple times of the period of the observation, and the choice of cycle can be ambiguous. This problem is naturally avoided in our method by only measuring the phase delay between the nearby station pairs. In the TA application, we only measure the station pair within 200km, which is less than 3 wavelength of the highest frequency band (50mHz). In most cases, a very rough estimation of reference phase velocity allows for unambiguous selection of the correct phase delay. 
+The raw phase delays are then checked and corrected for cycle-skipping.  This is a particular important problem for the higher-frequency observations, and/or for station pairs with relatively large source-receiver separation, for which the phase delay between the two stations may approach or exceed multiple times of the period of the observation, and the choice of cycle can be ambiguous. This problem is naturally avoided by only measuring the phase delay between the nearby station pairs. In the TA application, we only measure the station pair within 200km, which is less than 3 wavelength of the highest frequency band (50mHz). In most cases, a very rough estimation of reference phase velocity allows for unambiguous selection of the correct phase delay. 
 
-The raw phase delays are then checked and corrected for cycle-skipping.  This is particular important for the higher-frequency observations, and/or for station pairs with relatively large source-receiver separation, for which the phase delay between the two stations may approach or exceed the period of the observation, and the choice of cycle can be ambiguous.  We utilize a variety of information on choosing the correct phase, including the predicted phase velocity from typical crust and upper mantle models at the dominant period of the measurement (typical 30-40 s), requiring the resulting dispersion curve to be smooth, and checking the apparent phase between nearby station pairs for consistency.  In most cases, this combination of information allows for unambiguous selection of the correct phase delay. 
-
-The window function $W_S$ may also introduce bias in the measurement, simply by altering the input seismograms at the edges of the window.  To account for this, we calculate the cross-correlation between S2 and the isolation filter , $W_SS_2$.
+The window function $W_S$ may also introduce bias in the measurement, simply by altering the input seismograms at the edges of the window.  To account for this, we calculate the cross-correlation between $S_2$ and the isolation filter, $W_SS_2$.
 \[
 \tilde{C}(t) = S_2 \star W_sS_2
 \]
 \[
 F_i \ast W_c \tilde{C}(t) \approx \tilde{A} Ga [\tilde{\sigma}(t-\tilde{t_g})]cos[\tilde{\omega}(t-\tilde{t_p})]
 \]
-Since S2 and WSS2 are similar within the window of interest, $\tilde{C}(t)$ is similar to the auto-correlation function of $W_S SS_2$ with the group delay and phase delay close to zero. Any non-zero phase change measured in  corresponds to a delay associated with the windowing process, and by assuming that this windowing delay will be similar for the cross correlation $C(t)$Ct, we calculate a final set of bias-corrected delay times (Figure 3):
+Since $S_2$ and $W_SS_2$ are similar within the window of interest, $\tilde{C}(t)$ is similar to the auto-correlation function of $W_S S_2$ with the group delay and phase delay close to zero. Any non-zero phase change measured in  corresponds to a delay associated with the windowing process, and by assuming that this windowing delay will be similar for the cross correlation $C(t)$, we calculate a final set of bias-corrected delay times:
 \[
 \delta \tau_p = t_p - \tilde{t}_p 
 \]
 \[
 \delta \tau_g = t_g - \tilde{t}_g
 \]
-(Put equations for δτp and δτg here – the delta taus.  They are never written very clearly in Gee and Jordan, and people found it confusing)
 
-We perform this analysis between a given station and several nearby stations – generally those within xxxx200km.  Figure 4 displays the raw phase delays for a representative event recorded across the transportable array.  These observed variations are driven primarily by structural variations beneath the array, and they form the basis for inverting for phase-velocity variations across the array.  
+We perform this analysis between a given station and several nearby stations – generally those within 200km.  Figure~\ref{fig:dtp} displays the raw phase delays for a representative event recorded across the transportable array. These observed variations are driven primarily by structural variations beneath the array, and they form the basis for inverting for phase-velocity variations across the array.  
 
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/dtp_plot.pdf}
+	\caption{}
+	\label{fig:dtp}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Wavefield amplitudes}
+The associated amplitude of the surface wavefield is estimated using amplitude measurements performed on single station waveforms. We apply the five-parameter wavelet fitting to the windowed and narrow-band filtered auto-correlation function $\tilde{C}(t)$, which is defined as the cross-correlation between the isolation filter and the original waveform to generate the isolation filter. The scale factor $\tilde{A}$ of the wavelet is a good approximation of the power spectrum density function at center frequency of the narrow-band filter.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Derivation of apparent phase velocity}
+
+For each earthquake and at each frequency, the apparent phase velocity of the wavefield across the array is defined by the Eikonal equation 
+\[
+\frac{1}{c'(\vec{r})} = |\nabla \tau(\vec{r})|
+\]
+where $\tau(\vec{r})$ is the phase travel time. Also called the dynamic phase velocity, $c’(r)$ is the reciprocal of travel time surface gradient, which is close to the structural phase velocity, but will likely be distorted by propagation effects such as multi-pathing, back-scattering, and focusing of the wavefront [e.g. Lin et al., 2009].  The collection of inter-station phase delays provides a large and well-distributed dataset for estimating the phase gradient via tomographic inversion. The phase difference between two nearby stations $\delta \tau p$ can be described as:
+\[
+\delta \tau p = \int \vec{S}(\vec{r}) \cdot d\vec{r}
+\]
+where $\vec{S}$ is the slowness vector and $d\vec{r}$ is the great-circle path connecting the two stations.  We invert for the two Cartesian components of the slowness distribution (Sx and Sy) as a function of position across the array.  Sx and Sy can be either positive or negative depending on the direction of wave propagation.  The inversion is stabilized using a smoothness constraint that minimizes the second gradient of Sx and Sy. The error function being minimized can be presented as:
+\[
+\varepsilon = \sum \left( \int\limits_{r_i} \, \vec{S} \cdot d\vec{r} - \delta \tau_{p_i}\right)^2 + \lambda \left[ \sum \nabla^2 S_x + \sum \nabla^2 S_y \right]^2
+\]
+where the first term is the difference between observed and predicted phase delay, and $\lambda$ is the parameter controlling the smoothness. Figure~\ref{fig:eventfig} presents the apparent (Eikonal) phase velocities determined from the dtp data presented in Figure~\ref{fig:dtp}.    
+
+
+
+
+
+
+
+
+
+
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/event_phv/200901181411_4.png}
+	\caption{}
+	\label{fig:eventfig}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{acknowledgments}
 	Some NSF funding\ldots I guess\ldots
 \end{acknowledgments}
