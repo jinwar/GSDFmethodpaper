@@ -1,0 +1,12 @@
+# Automatic Generation of the Isoloation Filter
+When building this program, we try to reduce the human inter-action in the problem and hence decrease the subjectivity in the measurement as much as possible. The first step of this program is to select a window function $W_s$ to isolate energy of fundamental mode surface wave. The desired $W_s$ should be large enough to include the arrival times of all frequency bands, and small enough to exclude the interferece from other phases like higher modes and body waves as much as possible. For each station, we measure the group delays of all frequency bands using FTAN method [Levshin et al., 1992], then define a window function that includes these delay times plus 2 cycles before and 5 cycles after. Since single station measurement can be highly variable, we use the measurements from the whole array to fit a linear relation between the window function $W_s$ and epicenter distance, as:
+t_start = L/V1 + t1;
+t_end = L/V2 + t2;
+where L is the epicenter distance, and V1, V2, t1, t2 are parameters estimtated by linear regression.
+A case of automatical window selection can be seen in Figure ?.
+
+The window function used to generate the isolation filter for the fundamental Rayleigh wave can also be generated automatically. Since the Rayleigh wave is dispersed, the desired window function should be large enough to include the arrival times of all frequency bands, while small enough to exclude the interferece from other phases like higher modes and body waves as much as possible. To define this window, the group delays for all frequency bands are estimated using FTAN method {Levshin:1992ve}, which is close to measure the arrival time of the maximum amplitude in the envelop functions of narrow-band filtered waveforms. For each station, a window that includes all these amplitude maximums plus 2 cycles before and 5 cycles after is estimated. Then we can relate the start and end time of the window functions for all stations with the their epicenter distance using linear regression, which can be present as:
+t_start = L/V1 + t1;
+t_end = L/V2 + t2;
+where L is the epicenter distance, and V1, V2, t1, t2 are parameters estimtated by linear regression.
+A case of automatical window selection can be seen in Figure ?.

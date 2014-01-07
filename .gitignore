@@ -1,0 +1,10 @@
+*.aux
+*.log
+*.pdf
+*.zip
+*.bst
+*.cls
+*.sty
+gji_extraguide.tex
+gjilguid2e.tex
+pics
