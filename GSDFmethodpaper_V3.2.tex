@@ -1,0 +1,199 @@
+% gjilguid2e.tex
+% V2.0 released 1998 December 18
+% V2.1 released 2003 October 7 -- Gregor Hutton, updated the web address for the style files.
+
+%\documentclass[referee]{gji}
+\documentclass{gji}
+\usepackage{timet}
+\usepackage{graphicx}
+
+\title[Surface Wave Measurement Based on Cross-correlation]
+	{Surface Wave Measurement Based on Cross-correlation}
+\author[Ge Jin and James Gaherty]
+  {Ge Jin$^1$ and James Gaherty$^1$ \\
+  $^1$ Lamont-Doherty Earth Observatory, Columbia University
+  }
+\date{Receiverd 2014 March}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}
+\volume{}
+\pubyear{2014}
+
+%\def\LaTeX{L\kern-.36em\raise.3ex\hbox{{\small A}}\kern-.15em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}
+%\def\LATeX{L\kern-.36em\raise.3ex\hbox{{\Large A}}\kern-.15em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}
+% Authors with AMS fonts and mssymb.tex can comment out the following
+% line to get the correct symbol for Geophysical Journal International.
+\let\leqslant=\leq
+
+\newtheorem{theorem}{Theorem}[section]
+
+\begin{document}
+
+\label{firstpage}
+
+\maketitle
+
+
+\begin{summary}
+	Summary of the GSDF paper
+\end{summary}
+
+\begin{keywords}
+	 surface wave tomography -- phase velocity -- automatic -- USArray
+\end{keywords}
+
+\section{Introduction}
+
+Seismic surface waves represent one of the primary means for scientists to probe the structure of Earth's crust and upper mantle.  Surface waves provide direct constraints on both absolute velocity and relative velocity variations, and analysis of waves with different periods provides sensitivity to different depths.  These velocity variations in turn provide some of the best available constraints on a variety of geodynamic parameters, including absolute and relative variations in temperature (ref), crust and mantle composition, the presence or absence of fluid (melt) phases, and the distribution and orientation of flow-induced mineral fabric.  In many cases, however, resolution of these properties is limited by uncertainties in observed surface-wave velocities due to complexity in the seismic wavefield.  Because they sample the highly heterogeneous outer shell of the Earth, surface waves often contain waveform complexity caused by focusing and defocusing (often termed scattering or multipathing) that makes measurement of wave velocity uncertain (Figure~\ref{fig:arraywaveform}). 
+
+In recent years, a number of investigators have developed data analysis schemes designed to more robustly estimate surface-wave velocities in the presence of multipathing \cite{Friederich:1995ce,Forsyth:2005aa,Yang:2006fc,Lin:2009fx,Lin:2011fw,Yang:2011sw}.  These techniques exploit arrays of seismic stations to better quantify the detailed character of the surface wavefield, specifically by combining measurements of both phase and amplitude between stations.  These observations can be modeled in the context of wavefield character, for example local plane-wave propagation direction (e.g. Forsyth \& Li 2005) or apparent velocities \cite{Lin:2009fx}, as well as the structural phase velocity or delay times associated with the underlying media. The techniques are particularly useful for estimating structural velocities in localized regions spanning a receiver array, as opposed to along the entire path from the source to the receiver employed in global (e.g. Levshin et al. 1992; Li and Romanowicz 1995; Ekstr\"{o}m et al. 1997) and some regional (e.g. Chen et al. 2007; Tape et al. 2010; Zhu et al. 2012) analyses.  The estimates of structural phase or group velocities across the array can then be inverted for models of seismic velocity through the crust and mantle beneath the array, with greater confidence and accuracy than when using phase information alone (e.g. Yang et al. 2011; Rau and Forsyth 2011; Lin et al. 2011).
+
+We have developed a new algorithm to accurately estimate structural phase velocities from broadband recordings of surface waves propagating across an array of receivers.  The analysis is based on the notion that waveform cross-correlation provides a highly precise and robust quantification of relative phase between two observed waveforms, if the waveforms are similar in character.  This notion is routinely exploited in body-wave analyses for structure (e.g. van Decar and Crosson, 1990) and source (e.g. Schaff and Beroza, 2004) characteristics, but it is not widely utilized in surface-wave analysis.  Our approach builds upon the Generalized Seismological Data Functional (GSDF) analysis of Gee \& Jordan \shortcite{Gee:1992ww}, which utilizes cross-correlation between observed and synthetic seismograms to quantify phase and amplitude behavior of any general seismic waveform, including surface waves \cite{Gaherty:1995ld,Gaherty:1996ss,Gaherty:2004sw,Chen:2007ft,Chen:2007f3}.  By applying this quantification to cross-correlation functions between surface waves observed at two nearby stations, we generate highly robust and precise estimates of relative phase between the stations, due to the similar nature of the recorded waveforms.  The procedure is applicable to arrays across a variety of scales, from the continental scale of EarthScope's USArray Transportable Array (TA), to the few 100's km spanned by a typical PASSCAL experiment, to 100's of meters in industry experiments, and is amenable to automated analyses with minimal analyst interaction.  The resulting delay times and associated amplitudes can be modeled in the context of both wave-propagation and structural velocities.  Here we outline the analysis, and demonstrate it's application to the TA array.   
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/arraywaveform/200901181411_LHZ_waveform.pdf}	
+	\caption{USarray vertical component records for the January 18th, 2009 earthquake near Kermadec Islands, New Zealand (Mw=6.4). Red lines show the window function $W_S$ to isolate the fundamental Rayleigh wave energy, which is automatically generated. The length and amplitude variation of coda demonstrates the scattering caused by local heterogeneities.}
+	\label{fig:arraywaveform}
+\end{figure}
+
+\section{Methodology}
+\subsection{Inter-station phase delays}
+
+The methodology is based on the GSDF work flow presented by Gee and Jordan, \shortcite{Gee:1992ww}, and subsequently utilized for regional upper-mantle and crustal modeling (e.g. Gaherty and Jordan 1995; Gaherty et al 1996; Gaherty 2001, 2004; Chen et al. 2007b; Gaherty \& Dunn 2007).  In those analyses, the starting point consists of an observed broadband seismogram containing all seismic phases of interest, and a complete synthetic seismogram relative to which the phase delays and amplitude anomalies can be measured.  Here, we substitute a seismogram from a nearby station for the synthetic waveform, and measure phase and amplitude differences between phases of interest recorded at the two stations. Waveforms from these two stations are presented as $S_1$ and $S_2$ here (Figure 2). Because this is the first application of GSDF to an interstation analysis, we summarize the steps in some detail.  Gee and Jordan \shortcite{Gee:1992ww} provides a full theoretical presentation of GSDF. 
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/sta_waveforms.pdf}
+	\caption{Two sample waveforms of the same earthquake as in Figure 1 from station W17A ($S_1$) and W18A ($S_2$). The two stations are 89km apart and the waveforms are almost identical. The lower panel shows the windowed waveform to isolate the energy of fundamental Rayleigh wave.}
+	\label{fig:twostawaveform}
+\end{figure}
+
+The first step is to isolate the signal that we are interested in time domain. In the USArray application, we applied a window function $W_S$ that includes the primary surface wave (Rayleigh on vertical-component record, and Love on the transverse component) and most of its coda. Including the coda is useful, in that it is often highly correlated at stations within 1-2 wavelengths, as shown in Figure~\ref{fig:twostawaveform}. We then calculate the cross-correlation function $C(t)$ (cross-correlagram) between $S_1$ and $W_SS_2$, defined as:
+\[
+C(t) = S_1 \star W_S S_2
+\]
+$C(t)$ contains the delay or lag information of all coherent signals, with the peak corresponding roughly to a wide-band group delay between the two stations, with a center frequency defined by the dominant energy in the data, typically around 30 mHz for teleseismic Rayleigh waves.  We further isolate the dominant energy in the cross-correlation function in the time domain by applying a Hanning window around the peak of the cross-correlation function, producing $W_CC(t)$. The window function we applied here has a length of 200s.
+
+We then isolate the signals of interest in the frequency domain by convolving a sequence of Gaussian, narrow-band filters with $W_cC(t)$, forming a set of filtered correlagrams $F_i(\omega)\star ast W_c C(t)$, where $F_i(\omega)$ corresponds to each filter at center frequency $\omega_i$ (Figure 3).  These filtered correlagrams provide the frequency-dependent group and phase delays between the two stations, as well as the coherency between the two signals.  These frequency-dependent delays characterize the relative dispersion that has occurred between the two stations, and they provide the fundamental data for determining the phase velocity characteristics of the wavefield and the structure being sampled.  In the application that presenting here, we are interested in characterizing the phase-velocity of fundamental-mode surface waves in the 510-5200 mHz band, and so we apply a sequence of xxx narrow-band, zero-phase Gaussian filters with the band-width about 10\% of the center frequency.
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/cs_waveforms.pdf}
+	\caption{Two sample waveforms of the same earthquake as in Figure 1 from station W17A ($S_1$) and W18A ($S_2$). The two stations are 89km apart and the waveforms are almost identical. The lower panel shows the windowed waveform to isolate the energy of fundamental Rayleigh wave.}
+	\label{fig:twostawaveform}
+\end{figure}
+
+The narrow-band filtered cross-correlation function can be well approximated by a five-parameter wavelet which is the product of a Gaussian envelope and a cosine function:
+\[
+F_i \ast W_c C(t) \approx A Ga [\sigma(t-t_g)]cos[\omega(t-t_p)]
+\]
+(Gee and Jordan, 1992).  In this equation, $t_g$ and $t_p$ represent the frequency-dependent group and phase delays between the two stations, respectively, Ga is the Gaussian function, A is a positive scale factor, $\sigma$ is half-bandwidth and $\omega$ is the center frequency of the narrow-band waveform.
+
+The raw phase and group delays can then be corrected for bias introduced by the time-domain windowing steps.  As pointed out by Gee and Jordan [1992], windowing of the wide-band cross-correlation function around it’s peak introduces a bias in the frequency-dependent phase delays that can be estimated as:
+\[
+\delta t_{err} = (1-\xi)(\frac{\omega_f - \omega_c}{\omega_f}(t_c - \delta \tau_g(\omega_f))
+\]
+where $\xi$ is a time location parameter usually close to 1, $\omega_f$ is the frequency being measured, $\omega_c$ is the wide-band center frequency, $t_c$ is center of the window function, $\delta \tau_g(\omega_f)$ is the group delay of frequency.  This bias can be significant for those frequencies that are much lower than the center frequency, but can be minimized by iterating on the windowing and fitting process.  For frequencies that are lower than 16mHz (60s), we utilize the initial estimate of dtg to re-center the window function prior to narrow-band filtering these frequencies. This significantly reduces the difference between?  and ? thereby minimizing the bias correction.
+
+The raw phase delays are then checked and corrected for cycle-skipping.  This is a particular important problem for the higher-frequency observations, and/or for station pairs with relatively large source-receiver separation, for which the phase delay between the two stations may approach or exceed multiple times of the period of the observation, and the choice of cycle can be ambiguous. This problem is naturally avoided in our method by only measuring the phase delay between the nearby station pairs. In the TA application, we only measure the station pair within 200km, which is less than 3 wavelength of the highest frequency band (50mHz). In most cases, a very rough estimation of reference phase velocity allows for unambiguous selection of the correct phase delay. 
+
+The raw phase delays are then checked and corrected for cycle-skipping.  This is particular important for the higher-frequency observations, and/or for station pairs with relatively large source-receiver separation, for which the phase delay between the two stations may approach or exceed the period of the observation, and the choice of cycle can be ambiguous.  We utilize a variety of information on choosing the correct phase, including the predicted phase velocity from typical crust and upper mantle models at the dominant period of the measurement (typical 30-40 s), requiring the resulting dispersion curve to be smooth, and checking the apparent phase between nearby station pairs for consistency.  In most cases, this combination of information allows for unambiguous selection of the correct phase delay. 
+
+The window function $W_S$ may also introduce bias in the measurement, simply by altering the input seismograms at the edges of the window.  To account for this, we calculate the cross-correlation between S2 and the isolation filter , $W_SS_2$.
+\[
+\tilde{C}(t) = S_2 \star W_sS_2
+\]
+\[
+F_i \ast W_c \tilde{C}(t) \approx \tilde{A} Ga [\tilde{\sigma}(t-\tilde{t_g})]cos[\tilde{\omega}(t-\tilde{t_p})]
+\]
+Since S2 and WSS2 are similar within the window of interest, $\tilde{C}(t)$ is similar to the auto-correlation function of $W_S SS_2$ with the group delay and phase delay close to zero. Any non-zero phase change measured in  corresponds to a delay associated with the windowing process, and by assuming that this windowing delay will be similar for the cross correlation $C(t)$Ct, we calculate a final set of bias-corrected delay times (Figure 3):
+\[
+\delta \tau_p = t_p - \tilde{t}_p 
+\]
+\[
+\delta \tau_g = t_g - \tilde{t}_g
+\]
+(Put equations for δτp and δτg here – the delta taus.  They are never written very clearly in Gee and Jordan, and people found it confusing)
+
+We perform this analysis between a given station and several nearby stations – generally those within xxxx200km.  Figure 4 displays the raw phase delays for a representative event recorded across the transportable array.  These observed variations are driven primarily by structural variations beneath the array, and they form the basis for inverting for phase-velocity variations across the array.  
+
+\begin{acknowledgments}
+	Some NSF funding\ldots I guess\ldots
+\end{acknowledgments}
+
+\begin{thebibliography}{}
+
+   \bibitem[\protect\citename{Chen et al. }2010]{Chen:2010pk}
+	   Chen, P., Jordan, T.H., \& Lee, E.J., 2010. Perturbation kernels for generalized seismological data functionals (GSDF), \textit{\gji}, \textbf{183}, 869-883.
+
+   \bibitem[\protect\citename{Chen et al. }2007a]{Chen:2007ft}
+	   Chen, P., Jordan, T. H., \& Zhao, L., 2007. Full three‐dimensional tomography: a comparison between the scattering‐integral and adjoint‐wavefield methods, \textit{\gji}, \textbf{170}, 175-181.
+
+   \bibitem[\protect\citename{Chen et al. }2007b]{Chen:2007f3}
+	   Chen, P., Zhao, L., \& Jordan, T.H., 2007. Full 3D tomography for the crustal structure of the Los Angeles region, \textit{\bssa}, \textbf{97}, 1094-1120.
+
+   \bibitem[\protect\citename{Ekstr\"{o}m et al. }1997]{Ekstrom:1997mg}
+	   Ekstr\"{o}m, G., Tromp, J., \& Larson, E.W.F., 1997. Measurements and global models of surface wave propagation. \textit{\jgr}, \textbf{102}, 8137-8157. 
+
+   \bibitem[\protect\citename{Forsyth \& Li }2005]{Forsyth:2005aa}
+	   Forsyth, D. W., \& Li, A., 2005. Array analysis of two-dimensional variations in surface wave phase velocity and azimuthal anisotropy in the presence of multipathing interference, \textit{Geophysical Monograph Series}, \textbf{157}, 81-97.
+
+   \bibitem[\protect\citename{Friederich \& Wielandt }1995]{Friederich:1995ce}
+   Friederich, W., \& Wielandt E., 1995. Interpretation of Seismic Surface Waves in Regional Networks: Joint Estimation of Wavefield Geometry and Local Phase Velocity. Method and Numerical Tests, \textit{\gjras}, \textbf{120}, 731-744.
+
+   \bibitem[\protect\citename{Gaherty }2001]{Gaherty:2001se}
+	   Gaherty, J.B., 2001. Seismic evidence for hotspot-induced buoyant flow beneath the Reykjanes Ridge, \textit{Science}, \textbf{293}, 1645-1647.
+
+   \bibitem[\protect\citename{Gaherty }2004]{Gaherty:2004sw}
+	   Gaherty, J.B., 2004. A surface wave analysis of seismic anisotropy beneath eastern North America, \textbf{\gji}, \textbf{158}, 1053-1066.
+
+   \bibitem[\protect\citename{Gaherty }2007]{Gaherty:2007eh}
+	   Gaherty, J.B., \& Dunn, R.A., 2007. Evaluating hot spot–ridge interaction in the Atlantic from regional‐scale seismic observations, \textit{Geochemistry, Geophysics, Geosystems}, \textit{8}.
+
+   \bibitem[\protect\citename{Gaherty \& Jordan }1995]{Gaherty:1995ld}
+	   Gaherty, J.B., \& Jordan, T.H., 1995. Lehmann discontinuity as the base of an anisotropic layer beneath continents, \textit{Science}, \textbf{268}, 1468-1471.
+
+   \bibitem[\protect\citename{Gaherty et al. }1996]{Gaherty:1996ss}
+	   Gaherty, J. B., Jordan, T. H., \& Gee, L. S. (1996). Seismic structure of the upper mantle in a central Pacific corridor, \textit{\jgr}, \textbf{101}, 22291-22309.
+
+   \bibitem[\protect\citename{Gee \& Jordan }1992]{Gee:1992ww}
+	   Gee, L.S., \& Jordan, T.H., 1992. Generalized seismological data functionals, \textit{\gji}, \textbf{111}, 363–390.
+
+   \bibitem[\protect\citename{Levshin et al. }1992]{Levshin:1992ve}
+	   Levshin, A., Ratnikova, L., \& Berger, J, 1992. Peculiarities of surface-wave propagation across central Eurasia, \textit{\bssa}, \textbf{82}, 2464–2493.
+
+   \bibitem[\protect\citename{Li \& Romanowicz }1996]{Li:1996gm}
+	   Li, X.D., \& Romanowicz, B, 1996. Global mantle shear velocity model developed using nonlinear asymptotic coupling theory, \textit{\jgr}, \textbf{101}, 22245-22272.
+
+   \bibitem[\protect\citename{Lin \& Ritzwoller }2011]{Lin:2011fw}
+	   Lin, F.C., \& Ritzwoller, M.H., 2011. Helmholtz surface wave tomography for isotropic and azimuthally anisotropic structure, \textit{\gji}, \textbf{186}, 1104–1120.
+
+   \bibitem[\protect\citename{Lin et al. }2009]{Lin:2009fx}
+	   Lin, F.C., Ritzwoller, M.H., \& Snieder, R., 2009. Eikonal tomography: surface wave tomography by phase front tracking across a regional broad-band seismic array, \textit{\gji}, \textbf{177}, 1091–1110. 
+
+   \bibitem[\protect\citename{Rau \& Forsyth }2011]{Rau:2011mm}
+	   Rau, C. J., \& Forsyth, D.W., 2011. Melt in the mantle beneath the amagmatic zone, southern Nevada, \textit{Geology}, \textbf{39}, 975-978.
+
+   \bibitem[\protect\citename{Schaff \& Beroza }2004]{Schaff:2004cp}
+	   Schaff, D.P., \& Beroza, G.C., 2004. Coseismic and postseismic velocity changes measured by repeating earthquakes, \textit{\jgr}, \textbf{109}.
+
+   \bibitem[\protect\citename{Tape et al. }2010]{Tape:2010st}
+	   Tape, C., Liu, Q., Maggi, A., \& Tromp, J, 2010. Seismic tomography of the southern California crust based on spectral‐element and adjoint methods, \textit{\gji}, \textbf{180}, 433-462.
+
+   \bibitem[\protect\citename{VanDecar \& Crosson }1990]{VanDecar:1990dt}
+	   VanDecar, J.C., \& Crosson, R.S., 1990. Determination of teleseismic relative phase arrival times using multi-channel cross-correlation and least squares, \textit{\bssa}, \textbf{80}, 150-169.
+
+   \bibitem[\protect\citename{Yang \& Forsyth }2006]{Yang:2006fc}
+	   Yang, Y., \& Forsyth, D. W., 2006. Regional tomographic inversion of the amplitude and phase of Rayleigh waves with 2-D sensitivity kernels, \textit{\gji}, \textbf{166}, 1148-1160.
+
+   \bibitem[\protect\citename{Yang et al. }2011]{Yang:2011sw}
+	   Yang, Y., Shen, W., \& Ritzwoller, M.H., 2011. Surface wave tomography on a large-scale seismic array combining ambient noise and teleseismic earthquake data, \textit{Earthquake Science}, \textbf{24}, 55-64.
+
+   \bibitem[\protect\citename{Zhu et al. }2012]{Zhu:2012st}
+	   Zhu, H., Bozda\v{g}, E., Peter, D., \& Tromp, J., 2012. Structure of the European upper mantle revealed by adjoint tomography, \textit{Nature Geoscience}, \textbf{5}, 493-498.
+
+\end{thebibliography}
+
+\label{lastpage}
+
+
+\end{document}
