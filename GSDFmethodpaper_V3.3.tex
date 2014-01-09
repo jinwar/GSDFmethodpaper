@@ -59,6 +59,7 @@ We have developed a new algorithm to accurately estimate structural phase veloci
 
 \section{Methodology}
 \subsection{Inter-station phase delays}
+\label{sec:gsdf}
 
 The methodology is based on the GSDF work flow presented by Gee and Jordan, \shortcite{Gee:1992ww}, and subsequently utilized for regional upper-mantle and crustal modeling (e.g. Gaherty and Jordan 1995; Gaherty et al 1996; Gaherty 2001, 2004; Chen et al. 2007b; Gaherty \& Dunn 2007).  In those analyses, the starting point consists of an observed broadband seismogram containing all seismic phases of interest, and a complete synthetic seismogram relative to which the phase delays and amplitude anomalies can be measured.  Here, we substitute a seismogram from a nearby station for the synthetic waveform, and measure phase and amplitude differences between phases of interest recorded at the two stations. Waveforms from these two stations are presented as $S_1$ and $S_2$ here (Fig.~\ref{fig:twostawaveform}). Because this is the first application of GSDF to an interstation analysis, we summarize the steps in some detail.  Gee and Jordan \shortcite{Gee:1992ww} provides a full theoretical presentation of GSDF. 
 
@@ -203,15 +204,15 @@ Since the correction term has been strongly smoothed, the amplitude of this term
 
 \subsection{Improvement compare to FTAN method}
 
-Frequency Time Analysis (FTAN) method is widely used as one of the classical seismic analysis procedures in many studies\cite{Levshin:1992ve,Levshin:2001ad,Lin:2011fw,Yang:2011sw}. For each frequency, the method measures the phase and amplitude at the envelop function maximum.
+In this section we would like to compare the phase measurement method developed in this study with the classical Frequency Time Analysis (FTAN) method developed by Levshin et al. \shortcite{Levshin:1992ve}. 
+FTAN method is widely used in many global or regional surface wave studies (e.g. Levshin et al. 1992; Levshin & Ritzwoller 2001; Lin & Ritzwoller 2011; Yang et al. 2011). This method applies a sequences of narrow-band filters to the raw seismograms and retrieves the group delays by tracking the arrival time of the envelop function maximum at each frequency. And the phase and amplitude measurements are made at these group delays for later tomographic inversion. Although theoretically the two methods extract the same information from the data, there are several fundamental differences between them. 
 
-The method relies on the detection of a continuous group delay travel time curve by tracking the maximum amplitude of the envelope function at each frequencies. Then the phase and amplitude on this curve is measured. Finally, phase delay from the source to the station is then calculated by assuming a reference model. 
+First, different techniques are used to retrieve phase information: we use the cross-correlation of coherent signals between stations, while FTAN method is based on the Hilbert transform of single station waveform. Cross-correlation can suppress the interference of random noise on the measurement, as it is not coherent among the stations. Here we build up a synthetic test to demonstrate the effect of random noise on both methods. A narrow band surface wave is simulated by a Gaussian enveloped cosine function propagating along a straight line. The group velocity of the wavelet (the velocity of Gaussian envelop) is 3.7km/s and the phase velocity is 4.0km/s. We add a normal distribute random noise with variance 20\% of the wavelet maximum amplitude to the data, and then measure the phase velocity between 500 station pairs 50km apart along the ray path using both methods. The result shows that under the same noise level, the misfit of cross-correlation measurement is significantly smaller (~50\%) than the misfit measured using FTAN (Fig.~\ref{fig:syntest})
 
-The main difference between our method and FTAN method is that instead of only focusing on a small window around the peak energy, our method takes all the coherent propagating energy into the consideration. As a result, random noise can be further depressed to make the measurement more precise. 
 
-We built up a simple synthetic test to explore the robustness of these two methods. We simulate a narrow band surface wave by a Gaussian enveloped cosine function propagating with group velocity (the velocity of Gaussian envelop) 3.7km/s and phase velocity (phase velocity of the cosine function) 4.0km/s. 10\% random noise is added into the waveform, and then the phase difference between 200 station pairs 50km apart are measured at 0.03Hz by both methods. The result of this synthetic test is shown in Fig.~\ref{fig:syntest}. It shows that under the same noise level, the error produced by our method is about half of that produced by FTAN method.
 
-Another difference is that instead of measuring the phase delay from the source to the station, we measure the phase difference between the nearby stations. And since the stations are close to each other, usually within several wavelengths even for the highest frequency, there is no need to concern about cycle skipping problem.
+%
+%Another difference is that instead of measuring the phase delay from the source to the station, we measure the phase difference between the nearby stations. And since the stations are close to each other, usually within several wavelengths even for the highest frequency, there is no need to concern about cycle skipping problem.
 
 \begin{figure}
 	\includegraphics[width=8.5cm]{pics/gsdfvsftan/gsdfvsftan.pdf}
