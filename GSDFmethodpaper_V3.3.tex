@@ -206,7 +206,7 @@ Since the correction term has been strongly smoothed, the amplitude of this term
 
 In this section we would like to compare the phase measurement method developed in this study with the classical Frequency Time Analysis (FTAN) method developed by Levshin et al. \shortcite{Levshin:1992ve}. 
 
-FTAN method is widely used in many global or regional surface wave studies (e.g. Levshin et al. 1992; Levshin \& Ritzwoller 2001; Lin \& Ritzwoller 2011; Yang et al. 2011). This method applies a sequences of narrow-band filters to the raw seismograms,` and retrieves the group delays by tracking the arrival time of the envelop function maximum at each frequency. The phase and amplitude measurements are made at these group delays for later tomographic inversion. Although theoretically the two methods extract the same information from the data, there are two major differences between them. 
+FTAN method is widely used in many global or regional surface wave studies (e.g. Levshin et al. 1992; Levshin \& Ritzwoller 2001; Lin \& Ritzwoller 2011; Yang et al. 2011). This method applies a sequences of narrow-band filters to the raw seismograms, and retrieves the group delays by tracking the arrival time of the envelop function maximum at each frequency. The phase and amplitude measurements are made at these group delays for later tomographic inversion. Although theoretically the two methods extract the same information from the data, there are two major differences between them. 
 
 First, different techniques are used to retrieve phase information: we use the cross-correlation of coherent signals between stations, while FTAN method is based on the Hilbert transform of single station waveform. Cross-correlation can suppress the interference of random noise on the measurement, as it is not coherent among the stations. Here we build up a synthetic test to demonstrate the effect of random noise on both methods. A narrow band surface wave is simulated by a Gaussian enveloped cosine function propagating along a straight line. The group velocity of the wavelet (the velocity of Gaussian envelop) is 3.7km/s and the phase velocity is 4.0km/s. We add a normal distribute random noise with variance 20\% of the wavelet maximum amplitude to the data, and then measure the phase velocity between 500 station pairs 50km apart along the ray path using both methods. The result shows that under the same noise level, the misfit of cross-correlation measurement is significantly smaller (~50\%) than the misfit measured using FTAN (Fig.~\ref{fig:syntest})
 
@@ -228,23 +228,27 @@ Fig.~\ref{fig:eikonal_comp}a and b demonstrate the performance of these two meth
 
 \begin{figure*}
 	\includegraphics[width=17cm]{pics/eikonal_test/eikonal_comp.pdf}
-	\caption{}
+	\caption{Eikonal Tomography results using different phase measurement methods and Eikonal tomography inversions for the April 7, 2009 earthquake near Kuril Islands ($M_s$=6.8). We select the same earthquake as shown in fig. 3a of Lin and Ritzwoller (2011) for comparison. a) Phase velocity obtained by using the FTAN phase measurement, and taking travel-time surface gradient. b) Same as a) but using cross-correlation phase measurement. c) Same as b) but phase velocity is obtained by inversing slowness vector.}
 	\label{fig:eikonal_comp}
+\end{figure*}
+
+\begin{figure*}
+	\includegraphics[width=17cm]{pics/eikonal_test/amplitude_comp.pdf}
+	\caption{}
+	\label{fig:amp_comp}
 \end{figure*}
 
 \subsection{Helmholtz Tomography}
 
-
-Another purpose of this study is to provide alternative ways to accomplish Helmholtz tomography developed by Lin and Ritzwoller \shortcite{Lin:2011fw}. 
+Another purpose of this study is to provide alternative ways to practice Eikonal and Helmholtz tomography developed by Lin et al. \shortcite{Lin:2009fx} and Lin and Ritzwoller \shortcite{Lin:2011fw}. 
 
 Since we measure the phase difference between the stations instead of absolute phase travel time at individual stations, it is not necessary to build a travel time surface $\tau(\vec{r})$ and then take its gradient to obtain apparent phase velocity. Instead, we prefer to inverse the slowness vector components $S_x$ and $S_y$ directly as described in section~\ref{sec:apv}, which has several advantages. First, we can utilize the  well developed ray theory techniques to build up the inversion. Second, like conventional ray theory tomography, the ray density performs as a valuable parameter that quantitatively represents how well the inversion is constrained by the data. It can be used to determine the region with valid result and to weight the later stacking process. Finally, by putting the smoothing kernel directly on slowness instead of its integral (travel time), we gain better control on the smoothness of the desired variable: the slowness is allowed to vary smoothly, comparing to minimizing the gradient variation by fitting the travel time surface with minimum curvature. 
 
 Fig.~\ref{fig:eikonal_comp}b and c shows the result of two different kind of Eikonal tomography inversion using the same phase measurement. Comparing to Fig.~\ref{fig:eikonal_comp}b, Fig.~\ref{fig:eikonal_comp}c indicates that using our inversion, the short wave length noise is further suppressed while the amplitude of strong anomalies (e.g. Yellow Stone hot spot and Rocky Mountain) is maintained. This improvement has the potential to enhance the resolution of final result, though it is secondary comparing to the improvement we obtain from better phase measurement (Fig.~\ref{fig:eikonal_comp}). 
 
-%
-%The amplitude correction term, on the other hand, is more challenging to estimate, because it requires both amplitude distribution and the Laplacian term of it. Theoretically, at least three data points are needed to calculate the gradient of surface, while Laplacian term requires at least six data points. As a result, by nature the resolution of the amplitude correction term is only half as fine as the resolution of phase gradient. This difference can be even more significant if we compare the precision of amplitude measurement and phase measurement. 
-%
-%Extra efforts have to be made to stabilize the Laplacian term. Lin and Ritzwoller \shortcite{Lin:2011fw} fit the minimizing curvature amplitude surface twice iteratively while we prefer adding the fourth derivative into the smoothing kernel and applying a further smoothing operator on the Laplacian term alone. This two method is not mathematically equivalent but both targeting at producing smooth correction term. However, one of the inevitable consequences of these smoothing operations is the underestimation of the correction term. As a result, we try to reduce this bias by increasing the amplitude of this correction term by minimizing the difference between the individual event phase velocity map and the multi-event averaged dynamic phase velocity map.
+To obtained the amplitude correction term is more challenging. First of all, the amplitude measurement is not as robust as the phase measurement. Both our method and the FTAN estimate the amplitude based on single station measurement, which is difficult to control the data qualify. Surface wave amplitude is also affected by local amplification and station term (ref). Moreover, the correction term  relies on the estimation of the amplitude field Laplacian term. Using finite difference to calculate the second order derivative of a surface at a certain location requires 9 to 16 adjoint data points, which triples the requirement to obtain the gradient. For an array setup like USArray with ~70km average station spacing, this restricts the resolution of the amplitude correction term to be lower than 140km \cite{Lin:2011fw}. Finally, fitting amplitude surface by minimizing its curvature does not guarantee the smoothness of its Laplacian term, as shown in Fig.~\ref{fig:amp_comp}b. Adding fourth order derivative minimization into the damping kernel to fit the amplitude surface was attempted, but no result improvement was observed.
+
+To partially resolve these difficulties, we adopt an approach that is similar to Lin \& Ritzwoller (2011). After retrieving the amplitude surface (Fig.~\ref{fig:amp_comp}a) and calculating the second derivative, a rough correction term is generated first (Fig.~\ref{fig:amp_comp}b). We then fit a minimum curvature surface again over this preliminary correction term, with a much larger damping factor to remove any variance with the wavelength shorter than the theoretical resolution (~140km for USArray), as shown in Fig.~\ref{fig:amp_comp}c. The smoothed correction term can then be applied to clean up the apparent phase velocity map. By comparing Fig.~\ref{fig:amp_comp}d and Fig.~\ref{fig:eikonal_comp}c, we can see that the bias caused by multi-pathing interference is significantly reduced and the anomalies agree with the geological structure better. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{acknowledgments}
@@ -338,6 +342,11 @@ Fig.~\ref{fig:eikonal_comp}b and c shows the result of two different kind of Eik
 	   Zhu, H., Bozda\v{g}, E., Peter, D., \& Tromp, J., 2012. Structure of the European upper mantle revealed by adjoint tomography, \textit{Nature Geoscience}, \textbf{5}, 493-498.
 
 \end{thebibliography}
+
+
+
+
+
 
 \label{lastpage}
 
