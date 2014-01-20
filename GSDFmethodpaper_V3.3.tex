@@ -2,8 +2,8 @@
 % V2.0 released 1998 December 18
 % V2.1 released 2003 October 7 -- Gregor Hutton, updated the web address for the style files.
 
-%\documentclass[referee]{gji}
-\documentclass{gji}
+\documentclass[referee]{gji}
+%\documentclass{gji}
 \usepackage{timet}
 \usepackage{graphicx}
 
@@ -51,11 +51,6 @@ In recent years, a number of investigators have developed data analysis schemes 
 
 We have developed a new algorithm to accurately estimate structural phase velocities from broadband recordings of surface waves propagating across an array of receivers.  The analysis is based on the notion that waveform cross-correlation provides a highly precise and robust quantification of relative phase between two observed waveforms, if the waveforms are similar in character.  This notion is routinely exploited in body-wave analyses for structure (e.g. van Decar and Crosson, 1990) and source (e.g. Schaff and Beroza, 2004) characteristics, but it is not widely utilized in surface-wave analysis.  Our approach builds upon the Generalized Seismological Data Functional (GSDF) analysis of Gee \& Jordan \shortcite{Gee:1992ww}, which utilizes cross-correlation between observed and synthetic seismograms to quantify phase and amplitude behavior of any general seismic waveform, including surface waves \cite{Gaherty:1995ld,Gaherty:1996ss,Gaherty:2004sw,Chen:2007ft,Chen:2007f3}.  By applying this quantification to cross-correlation functions between surface waves observed at two nearby stations, we generate highly robust and precise estimates of relative phase between the stations, due to the similar nature of the recorded waveforms.  The procedure is applicable to arrays across a variety of scales, from the continental scale of EarthScope's USArray Transportable Array (TA), to the few 100's km spanned by a typical PASSCAL experiment, to 100's of meters in industry experiments, and is amenable to automated analyses with minimal analyst interaction.  The resulting delay times and associated amplitudes can be modeled in the context of both wave-propagation and structural velocities.  Here we outline the analysis, and demonstrate it's application to the TA array.   
 
-\begin{figure}
-	\includegraphics[width=8.5cm]{pics/arraywaveform/200901181411_LHZ_waveform.pdf}	
-	\caption{USarray vertical component records for the January 18th, 2009 earthquake near Kermadec Islands, New Zealand (Mw=6.4). Red lines show the window function $W_S$ to isolate the fundamental Rayleigh wave energy, which is automatically generated. The length and amplitude variation of coda demonstrates the scattering caused by local heterogeneities.}
-	\label{fig:arraywaveform}
-\end{figure}
 
 \section{Methodology}
 \subsection{Inter-station phase delays}
@@ -63,11 +58,6 @@ We have developed a new algorithm to accurately estimate structural phase veloci
 
 The methodology is based on the GSDF work flow presented by Gee and Jordan, \shortcite{Gee:1992ww}, and subsequently utilized for regional upper-mantle and crustal modeling (e.g. Gaherty and Jordan 1995; Gaherty et al 1996; Gaherty 2001, 2004; Chen et al. 2007b; Gaherty \& Dunn 2007).  In those analyses, the starting point consists of an observed broadband seismogram containing all seismic phases of interest, and a complete synthetic seismogram relative to which the phase delays and amplitude anomalies can be measured.  Here, we substitute a seismogram from a nearby station for the synthetic waveform, and measure phase and amplitude differences between phases of interest recorded at the two stations. Waveforms from these two stations are presented as $S_1$ and $S_2$ here (Fig.~\ref{fig:twostawaveform}). Because this is the first application of GSDF to an interstation analysis, we summarize the steps in some detail.  Gee and Jordan \shortcite{Gee:1992ww} provides a full theoretical presentation of GSDF. 
 
-\begin{figure}
-	\includegraphics[width=8.5cm]{pics/two_sta_waveform/sta_waveforms.pdf}
-	\caption{Two sample waveforms of the same earthquake as in Fig.\ref{fig:arraywaveform} from station W17A ($S_1$) and W18A ($S_2$). The two stations are 89km apart and the waveforms are almost identical. The lower panel shows the windowed waveform to isolate the energy of fundamental Rayleigh wave.}
-	\label{fig:twostawaveform}
-\end{figure}
 
 The first step is to isolate the signal that we are interested in time domain. In the USArray application, we applied a window function $W_S$ that includes the primary surface wave (Rayleigh on vertical-component record, and Love on the transverse component) and most of its coda. Including the coda is useful, in that it is often highly correlated at stations within 1-2 wavelengths, as shown in Fig.~\ref{fig:twostawaveform}. We then calculate the cross-correlation function $C(t)$ (cross-correlagram) between $S_1$ and $W_SS_2$, defined as:
 \[
@@ -77,11 +67,6 @@ $C(t)$ contains the delay or lag information of all coherent signals, with the p
 
 We then isolate the signals of interest in the frequency domain by convolving a sequence of Gaussian, narrow-band filters with $W_cC(t)$, forming a set of filtered correlagrams $F_i(\omega_i) \ast W_c C(t)$, where $F_i(\omega_i)$ corresponds to each filter at center frequency $\omega_i$ (Fig.~\ref{fig:cswaveform}). These filtered correlagrams provide information of the frequency-dependent group and phase delays between the two stations, as well as the coherence between the two signals. The frequency-dependent delays characterize the relative dispersion that has occurred along the ray path, and provide the fundamental data for determining the phase velocity characteristics of the wavefield and the structure being sampled.  In the application that presenting here, we are interested in characterizing the phase-velocity of fundamental-mode surface waves in the 10-50 mHz band, and so we apply a sequence of 8 narrow-band, zero-phase Gaussian filters with the band-width about 10\% of the center frequency.
 
-\begin{figure}
-	\includegraphics[width=8.5cm]{pics/two_sta_waveform/cs_waveforms.pdf}
-	\caption{Crossgrams of the waveforms in Fig.~\ref{fig:twostawaveform}. From top to bottom panels demonstrate the processing procedures described in the Methodology section: cross-correlating the waveforms from the two stations, windowing the cross-correlagrams, narrow-band filtering, and fitting a five-parameter wavelet. The narrow-band filter applied has a center frequency of 25mHz.}
-	\label{fig:cswaveform}
-\end{figure}
 
 The narrow-band filtered cross-correlation function can be well approximated by a five-parameter wavelet which is the product of a Gaussian envelope and a cosine function:
 \[
@@ -113,12 +98,6 @@ Since $S_2$ and $W_SS_2$ are similar within the window of interest, $\tilde{C}(t
 \]
 
 We perform this analysis between a given station and several nearby stations – generally those within 200km.  Fig~\ref{fig:dtp} displays the raw phase delays for a representative event recorded across the transportable array. These observed variations are driven primarily by structural variations beneath the array, and they form the basis for inverting for phase-velocity variations across the array.  
-
-\begin{figure}
-	\includegraphics[width=8.5cm]{pics/two_sta_waveform/dtp_plot.pdf}
-	\caption{}
-	\label{fig:dtp}
-\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Wavefield amplitudes}
@@ -161,11 +140,6 @@ where $A_i$ is the observed station amplitude at position $r_i$, $A(r_i)$ is the
 
 In the following section, we present the full application of this analysis to data from USArray. The analysis up through the calculation of structural phase velocity is done for individual events, and a range of frequencies.  For a fixed array geometry, the resulting phase-velocity maps from individual events are averaged (stacked) to produce phase velocity maps that can be used in a structural inversion for shear velocity.  In the case of a rolling array such as the TA, stacking and averaging over multiple events produces a single comprehensive phase velocity map that spans the history of the array deployment.   
 
-\begin{figure}
-	\includegraphics[width=8.5cm]{pics/event_phv/200901181411_4.png}
-	\caption{}
-	\label{fig:eventfig}
-\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data Processing}
@@ -214,29 +188,6 @@ Second, the two methods are sensitive to different portion of data. FTAN method 
 
 Fig.~\ref{fig:eikonal_comp}a and b demonstrate the performance of these two methods on the phase measurement for a real earthquake. Fig.~\ref{fig:eikonal_comp}a is the reproduced apparent phase velocity of Rayleigh wave by following the strategy described in Lin \& Ritzwoller (2011). It is almost the same as the fig.4a in their paper, and the subtle difference is caused by a slightly different choice of smoothing factor. In the Fig.~\ref{fig:eikonal_comp}b we replace the FTAN measurement with ours while keep everything else the same as Fig.~\ref{fig:eikonal_comp}a. The difference between the two plots indicates that our method substantially reduces short wavelength noises in apparent phase velocity inversion, and provides more stable measurement at low amplitude stations compare to the FTAN method. 
 
-\begin{figure}
-	\includegraphics[width=8.5cm]{pics/gsdfvsftan/gsdfvsftan.pdf}
-	\caption{Comparison between our method and FTAN method in a 1D synthetic test. Left panel:the misfit histogram of our method for 200 individual measurements with 20\% noise. Right panel: the misfit of FTAN measurement on the same dataset.}
-	\label{fig:syntest}
-\end{figure}
-
-\begin{figure}
-	\includegraphics[width=8.5cm]{pics/two_sta_waveform/highfscatter.pdf}
-	\caption{Station 327A vertical component of the same earthquake as in Fig.~\ref{fig:arraywaveform}. Upper panel: the original waveform filtered from 5 mHz to 100 mHz. Middle and lower panels: narrow-band filtered waveform with center frequency at 50 mHz and 25 mHz respectively. Thick dash lines are the envelop functions and vertical thin lines show the location of isolation window function $W_S$. FTAN method is difficult to make measurements at high frequencies as the selection of group delay can be controversial.}
-	\label{fig:highfscatter}
-\end{figure}
-
-\begin{figure*}
-	\includegraphics[width=17cm]{pics/eikonal_test/eikonal_comp.pdf}
-	\caption{Eikonal Tomography results using different phase measurement methods and Eikonal tomography inversions for the April 7, 2009 earthquake near Kuril Islands ($M_s$=6.8). We select the same earthquake as shown in fig. 3a of Lin and Ritzwoller (2011) for comparison. a) Phase velocity obtained by using the FTAN phase measurement, and taking travel-time surface gradient. b) Same as a) but using cross-correlation phase measurement. c) Same as b) but phase velocity is obtained by inversing slowness vector.}
-	\label{fig:eikonal_comp}
-\end{figure*}
-
-\begin{figure*}
-	\includegraphics[width=17cm]{pics/eikonal_test/amplitude_comp.pdf}
-	\caption{}
-	\label{fig:amp_comp}
-\end{figure*}
 
 \subsection{Helmholtz Tomography}
 
@@ -343,7 +294,59 @@ To partially resolve these difficulties, we adopt an approach that is similar to
 
 \end{thebibliography}
 
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/arraywaveform/200901181411_LHZ_waveform.pdf}	
+	\caption{USarray vertical component records for the January 18th, 2009 earthquake near Kermadec Islands, New Zealand (Mw=6.4). Red lines show the window function $W_S$ to isolate the fundamental Rayleigh wave energy, which is automatically generated. The length and amplitude variation of coda demonstrates the scattering caused by local heterogeneities.}
+	\label{fig:arraywaveform}
+\end{figure}
 
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/sta_waveforms.pdf}
+	\caption{Two sample waveforms of the same earthquake as in Fig.\ref{fig:arraywaveform} from station W17A ($S_1$) and W18A ($S_2$). The two stations are 89km apart and the waveforms are almost identical. The lower panel shows the windowed waveform to isolate the energy of fundamental Rayleigh wave.}
+	\label{fig:twostawaveform}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/cs_waveforms.pdf}
+	\caption{Crossgrams of the waveforms in Fig.~\ref{fig:twostawaveform}. From top to bottom panels demonstrate the processing procedures described in the Methodology section: cross-correlating the waveforms from the two stations, windowing the cross-correlagrams, narrow-band filtering, and fitting a five-parameter wavelet. The narrow-band filter applied has a center frequency of 25mHz.}
+	\label{fig:cswaveform}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/dtp_plot.pdf}
+	\caption{}
+	\label{fig:dtp}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/event_phv/200901181411_4.png}
+	\caption{}
+	\label{fig:eventfig}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/gsdfvsftan/gsdfvsftan.pdf}
+	\caption{Comparison between our method and FTAN method in a 1D synthetic test. Left panel:the misfit histogram of our method for 200 individual measurements with 20\% noise. Right panel: the misfit of FTAN measurement on the same dataset.}
+	\label{fig:syntest}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/highfscatter.pdf}
+	\caption{Station 327A vertical component of the same earthquake as in Fig.~\ref{fig:arraywaveform}. Upper panel: the original waveform filtered from 5 mHz to 100 mHz. Middle and lower panels: narrow-band filtered waveform with center frequency at 50 mHz and 25 mHz respectively. Thick dash lines are the envelop functions and vertical thin lines show the location of isolation window function $W_S$. FTAN method is difficult to make measurements at high frequencies as the selection of group delay can be controversial.}
+	\label{fig:highfscatter}
+\end{figure}
+
+\begin{figure*}
+	\includegraphics[width=17cm]{pics/eikonal_test/eikonal_comp.pdf}
+	\caption{Eikonal Tomography results using different phase measurement methods and Eikonal tomography inversions for the April 7, 2009 earthquake near Kuril Islands ($M_s$=6.8). We select the same earthquake as shown in fig. 3a of Lin and Ritzwoller (2011) for comparison. a) Phase velocity obtained by using the FTAN phase measurement, and taking travel-time surface gradient. b) Same as a) but using cross-correlation phase measurement. c) Same as b) but phase velocity is obtained by inversing slowness vector.}
+	\label{fig:eikonal_comp}
+\end{figure*}
+
+\begin{figure*}
+	\includegraphics[width=17cm]{pics/eikonal_test/amplitude_comp.pdf}
+	\caption{}
+	\label{fig:amp_comp}
+\end{figure*}
 
 
 
