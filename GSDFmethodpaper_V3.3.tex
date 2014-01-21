@@ -132,11 +132,11 @@ The bias between apparent phase velocity and structure phase velocity can be cor
 \frac{ \nabla^2 A(\vec{r})}{A(\vec{r}) \omega^2}
 \]
 Here $c(\vec{r})$ is the structural phase velocity and $A(\vec{r})$ is the amplitude field. The amplitude Laplacian term corrects for the influence of non-plane wave propagation on the apparent phase velocities, allowing for the recovery of the true structural phase velocity. Lin and Ritzwoller \shortcite{Lin:2011fw} applied this formulation to USArray data to explore the seismic structure of the western US.
-The input apparent phase velocity is derived as in section~\ref{sec:apv}.  For the amplitude term, we follow Lin and Ritzwoller \shortcite{Lin:2011fw} by fitting a smooth amplitude surface to the single-station amplitude estimates from \ref{sec:amp}. However, since the correction term depends on the Laplacian of the amplitude, we add a constraint to ensure smoothness of this term. The error function for the surface fitting is
+The input apparent phase velocity is derived as in section~\ref{sec:apv}.  For the amplitude term, we follow Lin and Ritzwoller \shortcite{Lin:2011fw} by fitting a minimum curvature amplitude surface to the single-station amplitude estimates from \ref{sec:amp}. The error function for the surface fitting is
 \[
-\varepsilon_{A}^2 = \sum_i\left|A(r_i)-A_i\right|^2 + \gamma\sum |\nabla^2 A(\vec{r})|^2 + \kappa \sum |\nabla^4 A(\vec{r})|^2
+\varepsilon_{A}^2 = \sum_i\left|A(r_i)-A_i\right|^2 + \lambda\sum |\nabla^2 A(\vec{r})|^2 
 \]
-where $A_i$ is the observed station amplitude at position $r_i$, $A(r_i)$ is the interpolated amplitude surface estimated at $r_i$, $\gamma$ and $\kappa$ control the smoothing weight for the surface and its Laplacian term. In practice, calculating the second gradients of amplitude required for this error minimization is sometimes problematic, as the Laplacian operator magnifies high frequency noises, and individual amplitude measurements can be highly variable due to local site conditions and erroneous instrument responses. We utilize a finite difference calculation to estimate these second derivatives numerically, after which we apply one more step of smoothing on the Laplacian term to suppress the noise.
+where $A_i$ is the observed station amplitude at location $r_i$, $A(r_i)$ is the interpolated amplitude estimated at $r_i$, and $\lambda$ controls the smoothing weight for the surface. In practice, calculating the second gradients of this amplitude surface is sometimes problematic, as the Laplacian operator magnifies high frequency noises, and individual amplitude measurements can be highly variable due to local site conditions and erroneous instrument responses \cite{Lin:2012la,Eddy:2013la}. We utilize a finite difference calculation to estimate these second derivatives numerically, after which we apply one more step of smoothing on the correction term to suppress the noise (See section\ref{sec:helm_dis} for more details).
 
 In the following section, we present the full application of this analysis to data from USArray. The analysis up through the calculation of structural phase velocity is done for individual events, and a range of frequencies.  For a fixed array geometry, the resulting phase-velocity maps from individual events are averaged (stacked) to produce phase velocity maps that can be used in a structural inversion for shear velocity.  In the case of a rolling array such as the TA, stacking and averaging over multiple events produces a single comprehensive phase velocity map that spans the history of the array deployment.   
 
@@ -145,7 +145,7 @@ In the following section, we present the full application of this analysis to da
 \section{Data Processing}
 We applied our method on the data of USArray from 2006 to 2014. ?? global events over magnitude 6 and shallower than 100km are selected to inverse the dynamics and structure phase velocity maps. Software SOD \cite{Owens:2004sod} is used to download boardband seismic waveforms and remove the instrument response, and Matlab is used to applied the filter and cross-correlation operation.
 
-\subsection{Auto selection of isolation filter}
+\subsection{Auto generation of isolation filter}
 When building this program, we try to reduce the human inter-action in the problem and hence decrease the subjectivity in the measurement as much as possible. 
 The first step of this program is to select a window function $W_s$ to isolate energy of fundamental mode surface wave. The desired $W_s$ should be large enough to include the arrival times of all frequency bands, and small enough to exclude the interference from other phases like higher modes and body waves as much as possible. For each station, we measure the group delays of all frequency bands using FTAN method \cite{Levshin:1992ve}, then define a window function that includes these delay times plus 2 cycles before and 5 cycles after. Since single station measurement can be highly variable, we use the measurements from the whole array to fit a linear relation between the window function $W_s$ and epicenter distance, as:
 \[
@@ -166,9 +166,9 @@ Frequency dependent coherence can be estimated by comparing the amplitude of cro
 \]
 where $A_{12}$ is the amplitude of narrow-band cross-correlation wavelet while $A_{1}$  and $A_{2}$ are the amplitude of the narrow-band auto-correlation wavelet of the two stations estimated in the section~\ref{sec:amp}. In this study, we exclude all the measurement with the coherence lower than 0.6.
 
-\subsection{Auto-Fitting the magnitude of amplitude correction term}
-
-Since the correction term has been strongly smoothed, the amplitude of this term is smaller than it should be. As a result, it cannot fully remove the bias introduced by multi-path interference and other propagation effects. However, it is well known that structure phase velocity can be well recovered by averaging the measurement of many events with good azimuthal coverage \cite{Bodin:2008jk}. As a result, we can rescale the amplitude correction term for each event to make the structure phase velocity map of single event close to the averaged dynamic phase velocity map of many events. This procedure improves the isotropic phase velocity map as well as the accuracy of azimuthal anisotropy measurement.
+%\subsection{Auto-Fitting the magnitude of amplitude correction term}
+%
+%Since the correction term has been strongly smoothed, the amplitude of this term is smaller than it should be. As a result, it cannot fully remove the bias introduced by multi-path interference and other propagation effects. However, it is well known that structure phase velocity can be well recovered by averaging the measurement of many events with good azimuthal coverage \cite{Bodin:2008jk}. As a result, we can rescale the amplitude correction term for each event to make the structure phase velocity map of single event close to the averaged dynamic phase velocity map of many events. This procedure improves the isotropic phase velocity map as well as the accuracy of azimuthal anisotropy measurement.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -190,6 +190,7 @@ Fig.~\ref{fig:eikonal_comp}a and b demonstrate the performance of these two meth
 
 
 \subsection{Helmholtz Tomography}
+\label{sec:helm_dis}
 
 Another purpose of this study is to provide alternative ways to practice Eikonal and Helmholtz tomography developed by Lin et al. \shortcite{Lin:2009fx} and Lin and Ritzwoller \shortcite{Lin:2011fw}. 
 
@@ -219,6 +220,9 @@ To partially resolve these difficulties, we adopt an approach that is similar to
 
    \bibitem[\protect\citename{Chen et al. }2007b]{Chen:2007f3}
 	   Chen, P., Zhao, L., \& Jordan, T.H., 2007. Full 3D tomography for the crustal structure of the Los Angeles region, \textit{\bssa}, \textbf{97}, 1094-1120.
+
+   \bibitem[\protect\citename{Eddy \& Ekstr\"{o}m}2013]{Eddy:2013la}
+	   Eddy, C. L. \& Ekstr\"{o}m G., 2013. Local ampliﬁcation of Rayleigh waves in the continental United States observed on the USArray, \textit{Earth Planet. Sci. Lett.}, in press, DOI: 10.1016/j.epsl.2014.01.013.
 
    \bibitem[\protect\citename{Ekstr\"{o}m et al. }1997]{Ekstrom:1997mg}
 	   Ekstr\"{o}m, G., Tromp, J., \& Larson, E.W.F., 1997. Measurements and global models of surface wave propagation. \textit{\jgr}, \textbf{102}, 8137-8157. 
@@ -264,6 +268,9 @@ To partially resolve these difficulties, we adopt an approach that is similar to
 
    \bibitem[\protect\citename{Lin et al. }2009]{Lin:2009fx}
 	   Lin, F.C., Ritzwoller, M.H., \& Snieder, R., 2009. Eikonal tomography: surface wave tomography by phase front tracking across a regional broad-band seismic array, \textit{\gji}, \textbf{177}, 1091–1110. 
+
+   \bibitem[\protect\citename{Lin et al. }2012]{Lin:2012la}
+	   Lin, F.C., Tsai, V.C., \& Ritzwoller, M.H., 2012. The local amplification of surface waves: A new observable to constrain elastic velocities, density, and anelastic attenuation, \textit{\jgr}, \textbf{117}, B06302.
 
    \bibitem[\protect\citename{Owens et al. }2004]{Owens:2004sod}
 	   Owens, T.J., Crotwell, H.P., Groves, C., \& Oliver-Paul, P., 2004. SOD: Standing order for data, \textit{Seism. Res. Lett.}, \textbf{75}, 515-520.
