@@ -157,14 +157,20 @@ T_2 = \frac{L}{v_2} + t2
 where $T_1$ and $T_2$ are the beginning and ending time of $W_S$, $L$ is the epicenter distance, and $v_1$, $v_2$, $t_1$, $t_2$ are parameters estimtated by linear regression.
 An example of automated window selection can be seen in Fig.~\ref{fig:arraywaveform}.
 
-\subsection{Auto selection of good measurement}
-We use coherence of the waveforms between nearby stations as the most important standard to exclude automatically the measurement with low quality. 
+\subsection{Auto selection of good measurements}
 
-Frequency dependent coherence can be estimated by comparing the amplitude of cross-correlation and two auto-correlation functions. Since we have already used five-parameter wavelet to estimate all these functions, it is convenient to use the fitting results. Coherence of a certain frequency band can be written as:
+We have designed three independent strategies to exclude unqualified phase measurements automatically at different stages of the data processing.
+
+We first use coherence of the waveforms between nearby stations as the most important factor to eliminate measurements from the dysfunctional or low SNR stations. Frequency dependent coherence can be estimated by comparing the amplitude of cross-correlation and two auto-correlation functions. Since we have already used five-parameter wavelet to estimate all these functions, it is convenient to use the fitting results. Coherence of a certain frequency band can be written as:
 \[
 \gamma = \frac{A_{12}^2}{\tilde{A}_{11}\tilde{A}_{22}}
 \]
-where $A_{12}$ is the amplitude of narrow-band cross-correlation wavelet while $A_{1}$  and $A_{2}$ are the amplitude of the narrow-band auto-correlation wavelet of the two stations estimated in the section~\ref{sec:amp}. In this study, we exclude all the measurement with the coherence lower than 0.6.
+where $A_{12}$ is the amplitude of narrow-band cross-correlation wavelet, $A_{1}$  and $A_{2}$ are the amplitude of the narrow-band auto-correlation wavelet of the two stations estimated in the section~\ref{sec:amp}. In this study, we exclude all the measurement with the coherence lower than 0.6.
+
+The second round of selection comes after the phase delay measurements from all the station pairs are gathered. We estimate an average phase velocity at each frequency by linear fitting the phase delay with epicenter distance difference. Then the measurements with the misfit more than 10s from this linear regression are removed from the following process. 10s is a weak constrain, as most of the heterogeneities in US continent only produce the phase delay anomaly from the average phase velocity less than 5s within the range of 200km (Fig.~\ref{fig:dtp}). This simple treatment discards most of extreme measurements and thus stabilize the following Eikonal inversion.
+
+Finally, after the Eikonal inversion described in Section~\ref{sec:apv}, we reject the measurements with the inversion misfit larger than three standard deviations, and inverse the slowness again. This step removes the inconsistent measurements and enhance the robustness of apparent phase velocity. 
+For the amplitude measurements, we discard the stations with the amplitude varying more than 30\% comparing to the median amplitude of their nearby stations ($<$200km).   
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -199,9 +205,12 @@ To obtained the amplitude correction term is more challenging. First of all, the
 
 To partially resolve these difficulties, we adopt an approach that is similar to Lin \& Ritzwoller (2011). After retrieving the amplitude surface (Fig.~\ref{fig:amp_comp}a) and calculating the second derivative, a rough correction term is generated first (Fig.~\ref{fig:amp_comp}b). We then fit a minimum curvature surface again over this preliminary correction term, with a much larger damping factor to remove any variance with the wavelength shorter than the theoretical resolution (~140km for USArray), as shown in Fig.~\ref{fig:amp_comp}c. The smoothed correction term can then be applied to clean up the apparent phase velocity map. By comparing Fig.~\ref{fig:amp_comp}d and Fig.~\ref{fig:eikonal_comp}c, we can see that the bias caused by multi-pathing interference is significantly reduced and the anomalies agree with the geological structure better. 
 
+\section{Conclusion}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{acknowledgments}
-	Some NSF funding\ldots I guess\ldots
+	Some NSF fund\ldots 
 \end{acknowledgments}
 
 \begin{thebibliography}{}
