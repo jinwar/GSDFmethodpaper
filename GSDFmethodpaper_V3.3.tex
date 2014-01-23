@@ -13,7 +13,8 @@
   {Ge Jin$^1$ and James Gaherty$^1$ \\
   $^1$ Lamont-Doherty Earth Observatory, Columbia University
   }
-\date{Receiverd 2014 March}
+%\date{Receiverd 2014 March}
+\date{}
 \pagerange{\pageref{firstpage}--\pageref{lastpage}}
 \volume{}
 \pubyear{2014}
@@ -143,7 +144,8 @@ In the following section, we present the full application of this analysis to da
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data Processing}
-We applied our method on the data of USArray from 2006 to 2014. ?? global events over magnitude 6 and shallower than 100km are selected to inverse the dynamics and structure phase velocity maps. Software SOD \cite{Owens:2004sod} is used to download boardband seismic waveforms and remove the instrument response, and Matlab is used to applied the filter and cross-correlation operation.
+\label{sec:data_processing}
+We applied our method on the data of USArray from 2006 to 2014. ?? global events over magnitude 6 and shallower than 100km are selected to invert the dynamics and structure phase velocity maps. Software SOD \cite{Owens:2004sod} is used to download boardband seismic waveforms and remove the instrument response, and Matlab is used to applied the filter and cross-correlation operation.
 
 \subsection{Auto generation of isolation filter}
 When building this program, we try to reduce the human inter-action in the problem and hence decrease the subjectivity in the measurement as much as possible. 
@@ -169,7 +171,7 @@ where $A_{12}$ is the amplitude of narrow-band cross-correlation wavelet, $A_{1}
 
 The second round of selection comes after the phase delay measurements from all the station pairs are gathered. We estimate an average phase velocity at each frequency by linear fitting the phase delay with epicenter distance difference. Then the measurements with the misfit more than 10s from this linear regression are removed from the following process. 10s is a weak constrain, as most of the heterogeneities in US continent only produce the phase delay anomaly from the average phase velocity less than 5s within the range of 200km (Fig.~\ref{fig:dtp}). This simple treatment discards most of extreme measurements and thus stabilize the following Eikonal inversion.
 
-Finally, after the Eikonal inversion described in Section~\ref{sec:apv}, we reject the measurements with the inversion misfit larger than three standard deviations, and inverse the slowness again. This step removes the inconsistent measurements and enhance the robustness of apparent phase velocity. 
+Finally, after the Eikonal inversion described in Section~\ref{sec:apv}, we reject the measurements with the inversion misfit larger than three standard deviations, and invert the slowness again. This step removes the inconsistent measurements and enhance the robustness of apparent phase velocity. 
 For the amplitude measurements, we discard the stations with the amplitude varying more than 30\% comparing to the median amplitude of their nearby stations ($<$200km).   
 
 
@@ -197,13 +199,52 @@ Fig.~\ref{fig:eikonal_comp}a and b demonstrate the performance of these two meth
 
 Another purpose of this study is to provide alternative ways to practice Eikonal and Helmholtz tomography developed by Lin et al. \shortcite{Lin:2009fx} and Lin and Ritzwoller \shortcite{Lin:2011fw}. 
 
-Since we measure the phase difference between the stations instead of absolute phase travel time at individual stations, it is not necessary to build a travel time surface $\tau(\vec{r})$ and then take its gradient to obtain apparent phase velocity. Instead, we prefer to inverse the slowness vector components $S_x$ and $S_y$ directly as described in section~\ref{sec:apv}, which has several advantages. First, we can utilize the  well developed ray theory techniques to build up the inversion. Second, like conventional ray theory tomography, the ray density performs as a valuable parameter that quantitatively represents how well the inversion is constrained by the data. It can be used to determine the region with valid result and to weight the later stacking process. Finally, by putting the smoothing kernel directly on slowness instead of its integral (travel time), we gain better control on the smoothness of the desired variable: the slowness is allowed to vary smoothly, comparing to minimizing the gradient variation by fitting the travel time surface with minimum curvature. 
+Since we measure the phase difference between the stations instead of absolute phase travel time at individual stations, it is not necessary to build a travel time surface $\tau(\vec{r})$ and then take its gradient to obtain apparent phase velocity. Instead, we prefer to invert the slowness vector components $S_x$ and $S_y$ directly as described in section~\ref{sec:apv}, which has several advantages. First, we can utilize the  well developed ray theory techniques to build up the inversion. Second, like conventional ray theory tomography, the ray density performs as a valuable parameter that quantitatively represents how well the inversion is constrained by the data. It can be used to determine the region with valid result and to weight the later stacking process. Finally, by putting the smoothing kernel directly on slowness instead of its integral (travel time), we gain better control on the smoothness of the desired variable: the slowness is allowed to vary smoothly, comparing to minimizing the gradient variation by fitting the travel time surface with minimum curvature. 
 
 Fig.~\ref{fig:eikonal_comp}b and c shows the result of two different kind of Eikonal tomography inversion using the same phase measurement. Comparing to Fig.~\ref{fig:eikonal_comp}b, Fig.~\ref{fig:eikonal_comp}c indicates that using our inversion, the short wave length noise is further suppressed while the amplitude of strong anomalies (e.g. Yellow Stone hot spot and Rocky Mountain) is maintained. This improvement has the potential to enhance the resolution of final result, though it is secondary comparing to the improvement we obtain from better phase measurement (Fig.~\ref{fig:eikonal_comp}). 
 
 To obtained the amplitude correction term is more challenging. First of all, the amplitude measurement is not as robust as the phase measurement. Both our method and the FTAN estimate the amplitude based on single station measurement, which is difficult to control the data qualify. Surface wave amplitude is also affected by local amplification and station term (ref). Moreover, the correction term  relies on the estimation of the amplitude field Laplacian term. Using finite difference to calculate the second order derivative of a surface at a certain location requires 9 to 16 adjoint data points, which triples the requirement to obtain the gradient. For an array setup like USArray with ~70km average station spacing, this restricts the resolution of the amplitude correction term to be lower than 140km \cite{Lin:2011fw}. Finally, fitting amplitude surface by minimizing its curvature does not guarantee the smoothness of its Laplacian term, as shown in Fig.~\ref{fig:amp_comp}b. Adding fourth order derivative minimization into the damping kernel to fit the amplitude surface was attempted, but no result improvement was observed.
 
 To partially resolve these difficulties, we adopt an approach that is similar to Lin \& Ritzwoller (2011). After retrieving the amplitude surface (Fig.~\ref{fig:amp_comp}a) and calculating the second derivative, a rough correction term is generated first (Fig.~\ref{fig:amp_comp}b). We then fit a minimum curvature surface again over this preliminary correction term, with a much larger damping factor to remove any variance with the wavelength shorter than the theoretical resolution (~140km for USArray), as shown in Fig.~\ref{fig:amp_comp}c. The smoothed correction term can then be applied to clean up the apparent phase velocity map. By comparing Fig.~\ref{fig:amp_comp}d and Fig.~\ref{fig:eikonal_comp}c, we can see that the bias caused by multi-pathing interference is significantly reduced and the anomalies agree with the geological structure better. 
+
+\subsection{Compatibility of two plane wave method}
+The two-plane-wave (TPW) method (ref) is more conventional than Eikonal/Helmholtz Tomography method (ref) in the field of surface wave tomography. It has more advantages for small arrays with irregular station spacing.  The TPW method retrieves amplitude and phase information at individual stations using Fourier Transform, and requires the data with low quality to be manually discarded.  In this section, we provide a simple algorithm to convert the cross-correlation measurements into a format that can be used by the TPW method.
+
+The TPW method requires absolute phase or relative phase delay of all the stations compare to one reference station, while the cross-correlation measures the relative phase difference between the station pairs. Each phase difference measurement can be written as:
+\[
+\tau_i - \tau_j = \delta \tau_{ij}
+\]
+Where $tau_i$ and $tau_j$ represent the absolute phase at station i and j, and delta tau ij is the cross-correlation phase difference measurement we make in this study. To solve $tau_i$, we build a matrix formula $A\tau = \delta\tau$ as:
+\[ 
+\left( \begin{array}{cccc}
+1 & -1 & 0 & \cdots \\
+1 & 0 & -1 & \cdots \\
+0 & 1 & -1 & \cdots \\
+\vdots &\vdots &\vdots & \vdots
+\end{array} \right)
+\left( \begin{array}{c}
+	\tau_1 \\ 
+	\tau_2 \\
+	\tau_3 \\
+	\vdots
+\end{array} \right) = 
+\left( \begin{array}{c}
+	\delta \tau_{12} \\ 
+	\delta \tau_{13} \\
+	\delta \tau_{23} \\
+	\vdots
+\end{array} \right)  
+\] 
+
+Where the matrix $A$ on the left side is redundant but not full rank, as no absolute phase information of any station is given. At this point we need to add one more equation to the set:
+\[
+\tau_1 = 0
+\]
+by assuming the first station has zero phase. Then the matrix $A$ is invertible, and the problem can be solved by least square inversion:
+\[
+\tau = (A^TA)^{-1}A^T \delta\tau
+\]
+where $\tau$ is the relative phase delay of all the stations compare to the reference station. $\tau$ and the amplitude we measure in Section~\ref{sec:amp} can be used as input for the TPW method.
 
 \section{Conclusion}
 
@@ -327,13 +368,13 @@ To partially resolve these difficulties, we adopt an approach that is similar to
 
 \begin{figure}
 	\includegraphics[width=8.5cm]{pics/two_sta_waveform/dtp_plot.pdf}
-	\caption{}
+	\caption{Rayleigh Wave phase delay against epicenter distance difference of all the station pairs within 200km for the same earthquake as in Fig.\ref{fig:arraywaveform}. From warm to cold, different color crosses indicate the measurement at frequencies from lower to higher. An increasing move-out at lower frequencies can be observed due to the dispersion. }
 	\label{fig:dtp}
 \end{figure}
 
 \begin{figure}
-	\includegraphics[width=8.5cm]{pics/event_phv/200901181411_4.png}
-	\caption{}
+	\includegraphics[width=17cm]{pics/event_phv/eventplot.pdf}
+	\caption{The 40s Rayleigh wave results for two earthquakes. \textbf{a)} The apparent phase velocity map derived from phase delay measurement (Fig.~\ref{fig:dtp}) for the same earthquake as shown in Fig.\ref{fig:arraywaveform}. \textbf{b)} The corrected phase velocity map derived from a) and c) using Helmholtz equation. \textbf{c)} The amplitude map. \textbf{d)} The wave propagation direction anomaly map. The arrows point in the real propagation direction while the color contour illustrates the angle differ from the great circle path. The rotation of arrows is exaggerated for demostration. \textbf{e)}-\textbf{h)} Same as a)-d) but for the April 7, 2009 earthquake near Kuril Islands ($M_s=6.8$).}
 	\label{fig:eventfig}
 \end{figure}
 
@@ -351,13 +392,13 @@ To partially resolve these difficulties, we adopt an approach that is similar to
 
 \begin{figure*}
 	\includegraphics[width=17cm]{pics/eikonal_test/eikonal_comp.pdf}
-	\caption{Eikonal Tomography results using different phase measurement methods and Eikonal tomography inversions for the April 7, 2009 earthquake near Kuril Islands ($M_s$=6.8). We select the same earthquake as shown in fig. 3a of Lin and Ritzwoller (2011) for comparison. a) Phase velocity obtained by using the FTAN phase measurement, and taking travel-time surface gradient. b) Same as a) but using cross-correlation phase measurement. c) Same as b) but phase velocity is obtained by inversing slowness vector.}
+	\caption{60s Rayleigh wave Eikonal tomography results using different phase measurement methods and Eikonal tomography inversions for the April 7, 2009 earthquake near Kuril Islands ($M_s$=6.8). We select the same earthquake as shown in fig. 3a of Lin and Ritzwoller (2011) for comparison. a) Phase velocity obtained by using the FTAN phase measurement, and taking travel-time surface gradient. b) Same as a) but using cross-correlation phase measurement. c) Same as b) but phase velocity is obtained by inversing slowness vector.}
 	\label{fig:eikonal_comp}
 \end{figure*}
 
 \begin{figure*}
 	\includegraphics[width=17cm]{pics/eikonal_test/amplitude_comp.pdf}
-	\caption{}
+	\caption{Demostration of the amplitude correction process on the apparent phase velocity map in Fig.~\ref{fig:eikonal_comp}c. \textbf{a)} The amplitude map generated by fitting minimum curvature surface. \textbf{b)} The preliminary correction term derived from a). \textbf{c)} The smoothed correction term. \textbf{d)} The corrected phase velocity map, derived from c) and Fig.~\ref{fig:eikonal_comp}c. }
 	\label{fig:amp_comp}
 \end{figure*}
 
