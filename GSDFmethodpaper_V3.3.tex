@@ -143,20 +143,21 @@ In the following section, we present the full application of this analysis to da
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Data Processing}
+\section{Data Processing and Automation}
 \label{sec:data_processing}
-We applied our method on the data of USArray from 2006 to 2014. ?? global events over magnitude 6 and shallower than 100km are selected to invert the dynamics and structure phase velocity maps. Software SOD \cite{Owens:2004sod} is used to download boardband seismic waveforms and remove the instrument response, and Matlab is used to applied the filter and cross-correlation operation.
+We applied our method on the data of USArray since 2006. The Software SOD \cite{Owens:2004sod} is used to download the seismic waveforms and remove the instrument response, and Matlab to apply the filter and cross-correlation operation.
+In the process of building up the program, we reduce the human inter-action as much as possible to minimize the subjectivity in the measurement.
 
 \subsection{Auto generation of isolation filter}
-When building this program, we try to reduce the human inter-action in the problem and hence decrease the subjectivity in the measurement as much as possible. 
-The first step of this program is to select a window function $W_s$ to isolate energy of fundamental mode surface wave. The desired $W_s$ should be large enough to include the arrival times of all frequency bands, and small enough to exclude the interference from other phases like higher modes and body waves as much as possible. For each station, we measure the group delays of all frequency bands using FTAN method \cite{Levshin:1992ve}, then define a window function that includes these delay times plus 2 cycles before and 5 cycles after. Since single station measurement can be highly variable, we use the measurements from the whole array to fit a linear relation between the window function $W_s$ and epicenter distance, as:
+As the first step of the whole process, a window function $W_s$ is selected to isolate the energy of fundamental mode surface wave. The desired $W_s$ should be large enough to include the arrivals at all frequencies, and small enough to eliminate the interference from other phases like the higher modes and the body waves. For each station, we estimate the group delays of all frequency bands using FTAN method \cite{Levshin:1992ve}, then define a window that includes these delay times plus 2 cycles before and 5 cycles after for each frequency. As the single station measurement can be highly variable, we collect the measurements from the whole array to regress a linear relation between the window function $W_s$ and epicenter distance, as:
 \[
 T_1 = \frac{L}{v_1} + t1
 \]
 \[
 T_2 = \frac{L}{v_2} + t2
 \]
-where $T_1$ and $T_2$ are the beginning and ending time of $W_S$, $L$ is the epicenter distance, and $v_1$, $v_2$, $t_1$, $t_2$ are parameters estimtated by linear regression.
+where $T_1$ and $T_2$ are the beginning and ending time of $W_S$, $L$ is the epicenter distance, and $v_1$, $v_2$, $t_1$, $t_2$ are parameters estimated by the linear regression.
+
 An example of automated window selection can be seen in Fig.~\ref{fig:arraywaveform}.
 
 \subsection{Auto selection of good measurements}
@@ -174,10 +175,36 @@ The second round of selection comes after the phase delay measurements from all 
 Finally, after the Eikonal inversion described in Section~\ref{sec:apv}, we reject the measurements with the inversion misfit larger than three standard deviations, and invert the slowness again. This step removes the inconsistent measurements and enhance the robustness of apparent phase velocity. 
 For the amplitude measurements, we discard the stations with the amplitude varying more than 30\% comparing to the median amplitude of their nearby stations ($<$200km).   
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Result}
+
+Based on the techniques described above, we developed an automated system to retrieve the surface wave phase velocity from USArray data. Once a week the system is activated to download the boardband waveforms of eligible earthquakes ($M_s > 6.0$, depth $<50$km), and process the data to generate tomography maps like shown in Fig.~\ref{fig:eventfig}. Then the structural phase velocity maps from individual earthquakes are weighted and summerized. The weighting of each pixel is based on the ray density in the slowness inversion (Section~\ref{sec:apv}).
+
+\subsection{Phase Velocity Maps}
+
+From 2006 to 2014, totally ??? cross-correlation measurements from ??? earthquakes are inverted for structure phase velocity of both Rayleigh wave and Love wave at 8 frequency bands. The Rayleigh wave result is shown in Fig.~\ref{fig:rayleigh_result}, and the Love wave result in Fig.~\ref{fig:love_result}. 
+
+Due to the various data length and quality, the number of events being stacked at each pixel may vary for different locations and frequencies. Only pixels averaging more than 10 measurements are shown in the maps.
+
+\subsection{Comparison with ambient noise results}
+
+Micro-seismic generated ambient noise has been used to retrieve high frequency surface wave phase velocity (e.g., Bensen et al. 2007), as the energy of surface wave excited by earthquake decreases exponentially at frequencies higher than 30mHz.  We here compare the phase velocity maps from this study at highest frequency band (50mHz) with the ambient noise model provided by Ekstrom \shortcite{Ekstrom:2013lr}. This ambient noise model is also the output of an automated system, which downloads the continuous waveform data, estimates and stacks the normalized coherence, retrieves the phase delay between station pairs in frequency domain \cite{Ekstrom:1997mg}, and regulates the phase velocity map using ray theory. The model is regularly updated and can be downloaded from the author’s website.
+
+Fig~\ref{fig:noise_comp} illustrates the comparison for both Rayleigh and Love wave, in which we can see the results are highly consistent, despite they are retrieved from different seismic sources by using different phase measurement techniques and velocity inversions. Strong geological features are clearly high-lighted in both results, while the larger disagreements (Fig~\ref{fig:noise_comp}c and f) near the west coast and other strong velocity contrasts may be resulted from different smooth damping. 
+
+Fig.~\ref{fig:noise_hist} shows the statistic summary of this comparison. For Rayleigh wave, the correlation coefficient between the two maps is $0.94$. The mean of the velocity difference is $0.018$ km/s, and the standard deviation is $0.030$ km/s.  The small but systemic difference shows slightly higher velocities ($0.5\%$) from this study demonstrates the influence of the finite frequency effect, as the Helmholtz tomography allows for ray bending while conventional ray theory does not. 
+
+The Love wave results are usually less robust comparing to Rayleigh wave results because of the higher noise level existing in the horizontal components. Nevertheless, the correlation coefficient between the two studies is 0.89. The mean of the velocity difference for Love wave is $0.035$ km/s, and the standard deviation is $0.050$ km/s. A larger systemic difference is observed ($0.9\%$), which is almost twice the value of the difference in the Rayleigh wave results. Foster et al. \shortcite{Foster:2014sw} reported a systemic higher phase velocity obtained from mini-array method (similar to beamforming) than from the long-path two-station method. They suggested that the overtones interference affects the methods estimating local gradient more than the methods using longer ray paths, though how this influence generating systemic offset remains unclear.  And the source of ambient noise is usually believed to be shallow, the energy of overtones is smaller in the ambient noise waveforms comparing to the real earthquake waveforms. We therefore suspect that the overtones interference,  together with the influence of ray bending, may contribute to the higher bias observed for Love wave in this study. 
+
+
+
+
+\subsection{Possible Source of Error}
+
+\subsubsection{Azimuthal Anisotropy}
+
+\subsubsection{Overtones Interference}
 
 \section{Discussion}
 
@@ -256,6 +283,9 @@ where $\tau$ is the relative phase delay of all the stations compare to the refe
 
 \begin{thebibliography}{}
 
+   \bibitem[\protect\citename{Bensen et al. }2007]{Bensen:2007ps}
+	   Bensen, G.D., Ritzwoller, M.H., Barmin, M.P., Levshin, A.L., Lin, F., Moschetti, M.P., Chapiro, N.M. \& Yang Y., 2007. Processing seismic ambient noise data to obtain reliable broad‐band surface wave dispersion measurements. \textit{\gjras}, \textbf{169}, 1239–1260. doi:10.1111/j.1365-246X.2007.03374.x
+
    \bibitem[\protect\citename{Bodin \& Maupin }2008]{Bodin:2008jk}
 	   Bodin, T., \& Maupin, V., 2008. Resolution potential of surface wave phase velocity measurements at small arrays, \textit{\gji}, \textbf{172}, 698–706.
 
@@ -274,8 +304,14 @@ where $\tau$ is the relative phase delay of all the stations compare to the refe
    \bibitem[\protect\citename{Ekstr\"{o}m et al. }1997]{Ekstrom:1997mg}
 	   Ekstr\"{o}m, G., Tromp, J., \& Larson, E.W.F., 1997. Measurements and global models of surface wave propagation. \textit{\jgr}, \textbf{102}, 8137-8157. 
 
+   \bibitem[\protect\citename{Ekstr\"{o}m et al. }2013]{Ekstrom:2013lr}
+	   Ekstr\"{o}m, G., 2013. Love and Rayleigh phase-velocity maps, 5-40s, of the western and central USA from USArray data, \textit{\epsl}, \textbf{in press}.
+
    \bibitem[\protect\citename{Forsyth \& Li }2005]{Forsyth:2005aa}
 	   Forsyth, D. W., \& Li, A., 2005. Array analysis of two-dimensional variations in surface wave phase velocity and azimuthal anisotropy in the presence of multipathing interference, \textit{Geophysical Monograph Series}, \textbf{157}, 81-97.
+
+   \bibitem[\protect\citename{Foster et al.}2014]{Foster:2014sw}
+	   Foster, A., Ekstr\"{o}m, G., Nettles, M., 2014. Surface-wave phase velocities of the western United States from a two-station method. \textit{\gji}, \textbf{196}, 1189–1206.
 
    \bibitem[\protect\citename{Friederich \& Wielandt }1995]{Friederich:1995ce}
    Friederich, W., \& Wielandt E., 1995. Interpretation of Seismic Surface Waves in Regional Networks: Joint Estimation of Wavefield Geometry and Local Phase Velocity. Method and Numerical Tests, \textit{\gjras}, \textbf{120}, 731-744.
@@ -348,12 +384,14 @@ where $\tau$ is the relative phase delay of all the stations compare to the refe
 
 \end{thebibliography}
 
+%% Introduction
 \begin{figure}
 	\includegraphics[width=8.5cm]{pics/arraywaveform/200901181411_LHZ_waveform.pdf}	
 	\caption{USarray vertical component records for the January 18th, 2009 earthquake near Kermadec Islands, New Zealand (Mw=6.4). Red lines show the window function $W_S$ to isolate the fundamental Rayleigh wave energy, which is automatically generated. The length and amplitude variation of coda demonstrates the scattering caused by local heterogeneities.}
 	\label{fig:arraywaveform}
 \end{figure}
 
+%% Methodology
 \begin{figure}
 	\includegraphics[width=8.5cm]{pics/two_sta_waveform/sta_waveforms.pdf}
 	\caption{Two sample waveforms of the same earthquake as in Fig.\ref{fig:arraywaveform} from station W17A ($S_1$) and W18A ($S_2$). The two stations are 89km apart and the waveforms are almost identical. The lower panel shows the windowed waveform to isolate the energy of fundamental Rayleigh wave.}
@@ -378,6 +416,33 @@ where $\tau$ is the relative phase delay of all the stations compare to the refe
 	\label{fig:eventfig}
 \end{figure}
 
+%% Results
+
+\begin{figure}
+	\includegraphics[width=17cm]{pics/results/rayleigh_result.pdf}
+	\caption{Rayleigh wave phase vocity maps}
+	\label{fig:rayleigh_result}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=17cm]{pics/results/love_result.pdf}
+	\caption{Love wave phase vocity maps}
+	\label{fig:love_result}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=17cm]{pics/results/noise_20_comp.pdf}
+	\caption{20s Rayleigh and Love wave phase velocity comparison between earthquake and ambient noise measurement}
+	\label{fig:noise_comp}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/results/noise_hist.pdf}
+	\caption{20s Rayleigh and Love wave phase velocity comparison between earthquake and ambient noise measurement}
+	\label{fig:noise_hist}
+\end{figure}
+
+%% Discussion
 \begin{figure}
 	\includegraphics[width=8.5cm]{pics/gsdfvsftan/gsdfvsftan.pdf}
 	\caption{Comparison between our method and FTAN method in a 1D synthetic test. Left panel:the misfit histogram of our method for 200 individual measurements with 20\% noise. Right panel: the misfit of FTAN measurement on the same dataset.}
