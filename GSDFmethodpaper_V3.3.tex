@@ -202,9 +202,20 @@ The Love wave results are usually less robust comparing to Rayleigh wave results
 
 \subsection{Possible Source of Error}
 
+\subsubsection{Station Term}
+
+
 \subsubsection{Azimuthal Anisotropy}
 
 \subsubsection{Overtones Interference}
+
+\subsection{Spectrum Analysis of the Phase Maps}
+
+We apply the 2D Fourier transform separately on the western and eastern US to compare the geological active and stable parts of the continent. The Fourier Transform is performed in the sinusoidal map projections centered at ($40.5^\circ,-113^\circ$) and ($38^\circ,-90^\circ$) for eastern and western US respectively. The regions are defined in Fig.~\ref{fig:spectrum_analysis}a. We interpolate the empty spaces by using the minimum curvature surface technique. The amplitude spectra are shown in Fig.\ref{fig:spectrum_analysis}b, with only the structural wavelengths that are larger than the surface wave wavelengths being plotted to ensure the results are well above the resolution. 
+
+The amplitude spectra (Fig.\ref{fig:spectrum_analysis}b) indicate an increase of anomaly amplitude towards the longer structural wavelengths, which consists with the trend of the global observation at a larger scale \cite{Dziewonski:2010ma}. This observation also agrees with the commonsense that maintaining a strong anomaly (either compositional or thermal) within a short wavelength is usually difficult. 
+
+In the western US, the amplitude measured at the shorter periods are in general stronger, which may imply that more heterogeneous structure exists at the shallower depth. This trend is not very clear in the eastern US, as all the frequencies have similar amplitude at all wavelength. 
 
 \section{Discussion}
 
@@ -234,7 +245,7 @@ To obtained the amplitude correction term is more challenging. First of all, the
 
 To partially resolve these difficulties, we adopt an approach that is similar to Lin \& Ritzwoller (2011). After retrieving the amplitude surface (Fig.~\ref{fig:amp_comp}a) and calculating the second derivative, a rough correction term is generated first (Fig.~\ref{fig:amp_comp}b). We then fit a minimum curvature surface again over this preliminary correction term, with a much larger damping factor to remove any variance with the wavelength shorter than the theoretical resolution (~140km for USArray), as shown in Fig.~\ref{fig:amp_comp}c. The smoothed correction term can then be applied to clean up the apparent phase velocity map. By comparing Fig.~\ref{fig:amp_comp}d and Fig.~\ref{fig:eikonal_comp}c, we can see that the bias caused by multi-pathing interference is significantly reduced and the anomalies agree with the geological structure better. 
 
-\subsection{Compatibility of two plane wave method}
+\subsection{Compatibility with the two-plane-wave method}
 The two-plane-wave (TPW) method (ref) is more conventional than Eikonal/Helmholtz Tomography method (ref) in the field of surface wave tomography. It has more advantages for small arrays with irregular station spacing.  The TPW method retrieves amplitude and phase information at individual stations using Fourier Transform, and requires the data with low quality to be manually discarded.  In this section, we provide a simple algorithm to convert the cross-correlation measurements into a format that can be used by the TPW method.
 
 The TPW method requires absolute phase or relative phase delay of all the stations compare to one reference station, while the cross-correlation measures the relative phase difference between the station pairs. Each phase difference measurement can be written as:
@@ -297,6 +308,9 @@ where $\tau$ is the relative phase delay of all the stations compare to the refe
 
    \bibitem[\protect\citename{Chen et al. }2007b]{Chen:2007f3}
 	   Chen, P., Zhao, L., \& Jordan, T.H., 2007. Full 3D tomography for the crustal structure of the Los Angeles region, \textit{\bssa}, \textbf{97}, 1094-1120.
+
+   \bibitem[\protect\citename{Dziewo\'{n}ski et al. }2010]{Dziewonski:2010ma}
+	   Dziewo\'{n}ski, A.M., Lekic, V., \& Romanowicz, B.A., 2010. Mantle Anchor Structure: An argument for bottom up tectonics, \textit{\epsl}, \textbf{299}, 69–79. doi:10.1016/j.epsl.2010.08.013
 
    \bibitem[\protect\citename{Eddy \& Ekstr\"{o}m}2013]{Eddy:2013la}
 	   Eddy, C. L. \& Ekstr\"{o}m G., 2013. Local ampliﬁcation of Rayleigh waves in the continental United States observed on the USArray, \textit{Earth Planet. Sci. Lett.}, in press, DOI: 10.1016/j.epsl.2014.01.013.
@@ -440,6 +454,12 @@ where $\tau$ is the relative phase delay of all the stations compare to the refe
 	\includegraphics[width=8.5cm]{pics/results/noise_hist.pdf}
 	\caption{20s Rayleigh and Love wave phase velocity comparison between earthquake and ambient noise measurement}
 	\label{fig:noise_hist}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/results/spectrum_analysis.pdf}
+	\caption{2D Fourier analysis of the phase velocity maps for Rayleigh Wave. a) Regions that being analysed. b) Amplitude spectra against the structural wavelength at different frequency bands. Only the structural wavelengths that are larger than the surface wave wavelength are plotted here. }
+	\label{fig:spectrum_analysis}
 \end{figure}
 
 %% Discussion
