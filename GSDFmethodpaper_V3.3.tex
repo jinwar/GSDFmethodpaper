@@ -126,6 +126,7 @@ where the first term is the difference between observed and predicted phase dela
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Derivation of structural phase velocity}
+\label{sec:ampcor}
 
 The bias between apparent phase velocity and structure phase velocity can be corrected by adding amplitude measurements into the inversion, using an approximation to the Helmholtz equation \cite{Wielandt:1993ws,Lin:2011fw}:
 \[
@@ -173,6 +174,7 @@ where $A_{12}$ is the amplitude of narrow-band cross-correlation wavelet, $A_{1}
 The second round of selection comes after the phase delay measurements from all the station pairs are gathered. We estimate an average phase velocity at each frequency by linear fitting the phase delay with epicenter distance difference. Then the measurements with the misfit more than 10s from this linear regression are removed from the following process. 10s is a weak constrain, as most of the heterogeneities in US continent only produce the phase delay anomaly from the average phase velocity less than 5s within the range of 200km (Fig.~\ref{fig:dtp}). This simple treatment discards most of extreme measurements and thus stabilize the following Eikonal inversion.
 
 Finally, after the Eikonal inversion described in Section~\ref{sec:apv}, we reject the measurements with the inversion misfit larger than three standard deviations, and invert the slowness again. This step removes the inconsistent measurements and enhance the robustness of apparent phase velocity. 
+
 For the amplitude measurements, we discard the stations with the amplitude varying more than 30\% comparing to the median amplitude of their nearby stations ($<$200km).   
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -188,24 +190,30 @@ From 2006 to 2014, totally ??? cross-correlation measurements from ??? earthquak
 Due to the various data length and quality, the number of events being stacked at each pixel may vary for different locations and frequencies. Only pixels averaging more than 10 measurements are shown in the maps.
 
 \subsection{Comparison with ambient noise results}
+\label{sec:noise_comp}
 
 Micro-seismic generated ambient noise has been used to retrieve high frequency surface wave phase velocity (e.g., Bensen et al. 2007), as the energy of surface wave excited by earthquake decreases exponentially at frequencies higher than 30mHz.  We here compare the phase velocity maps from this study at highest frequency band (50mHz) with the ambient noise model provided by Ekstrom \shortcite{Ekstrom:2013lr}. This ambient noise model is also the output of an automated system, which downloads the continuous waveform data, estimates and stacks the normalized coherence, retrieves the phase delay between station pairs in frequency domain \cite{Ekstrom:1997mg}, and regulates the phase velocity map using ray theory. The model is regularly updated and can be downloaded from the author’s website.
 
-Fig~\ref{fig:noise_comp} illustrates the comparison for both Rayleigh and Love wave, in which we can see the results are highly consistent, despite they are retrieved from different seismic sources by using different phase measurement techniques and velocity inversions. Strong geological features are clearly high-lighted in both results, while the larger disagreements (Fig~\ref{fig:noise_comp}c and f) near the west coast and other strong velocity contrasts may be resulted from different smooth damping. 
+Fig~\ref{fig:noise_comp} illustrates the comparison for both Rayleigh and Love wave at the period of 20s. We can see the results are highly consistent, despite they are retrieved from different seismic sources by using different phase measurement techniques and velocity inversions. Strong geological features are clearly high-lighted in both results, while the larger disagreements (Fig~\ref{fig:noise_comp}c and f) near the west coast and other strong velocity contrasts may be resulted from different smooth damping. 
 
 Fig.~\ref{fig:noise_hist} shows the statistic summary of this comparison. For Rayleigh wave, the correlation coefficient between the two maps is $0.94$. The mean of the velocity difference is $0.018$ km/s, and the standard deviation is $0.030$ km/s.  The small but systemic difference shows slightly higher velocities ($0.5\%$) from this study demonstrates the influence of the finite frequency effect, as the Helmholtz tomography allows for ray bending while conventional ray theory does not. 
 
-The Love wave results are usually less robust comparing to Rayleigh wave results because of the higher noise level existing in the horizontal components. Nevertheless, the correlation coefficient between the two studies is 0.89. The mean of the velocity difference for Love wave is $0.035$ km/s, and the standard deviation is $0.050$ km/s. A larger systemic difference is observed ($0.9\%$), which is almost twice the value of the difference in the Rayleigh wave results. Foster et al. \shortcite{Foster:2014sw} reported a systemic higher phase velocity obtained from mini-array method (similar to beamforming) than from the long-path two-station method. They suggested that the overtones interference affects the methods estimating local gradient more than the methods using longer ray paths, though how this influence generating systemic offset remains unclear.  And the source of ambient noise is usually believed to be shallow, the energy of overtones is smaller in the ambient noise waveforms comparing to the real earthquake waveforms. We therefore suspect that the overtones interference,  together with the influence of ray bending, may contribute to the higher bias observed for Love wave in this study. 
-
-
+The Love wave results are usually less robust comparing to Rayleigh wave results because of the higher noise level existing in the horizontal components. Nevertheless, the correlation coefficient between the two studies is 0.89. The mean of the velocity difference for Love wave is $0.035$ km/s, and the standard deviation is $0.050$ km/s. A larger systemic difference is observed ($0.9\%$), which is almost twice the value of the difference in the Rayleigh wave results. 
 
 
 \subsection{Possible Source of Error}
 
-\subsubsection{Station Term}
+\subsubsection{Station Terms}
 
+Although the automated data selection techniques we described in Section~\ref{sec:data_processing} are able to eliminate most of the unqualified measurements with low signal-to-noise ratio, they cannot distinguish the stations with time-shift or strong amplification term, as the waveforms of those stations may still correlate well with their neighbors’. 
+
+The station time-shift can be generated from GPS disfunction or incorrect instrument response, which makes the timing of the station a bit earlier or later than the other stations. The time shifted stations can be distinguished in the apparent phase velocity maps by having two short-wavelength anomalies with reversed polarization before and after the station on the direction of wave propagation. Those stations can then be manually identified and excluded from the calculation. We do not perform this manual selection in this study because we want to demonstrate the result of a fully automated system. However, it is recommended for regional studies with less data and more requirement for detail structures.
+
+The station amplification term, on the other hand, is more unavoidable and its influence is less obvious comparing to the station time shift.  The amplitude correction we apply in Section~\ref{sec:ampcor} is based on the assumption that all the stations have the same amplification term, which is not perfect as the station amplification term can be affected by local geological structure and installation conditions. The ideal way to eliminate this bias is to estimate the station amplification term first by averaging multiple events \cite{Eddy:2013la}, or invert the phase velocity and amplification term iteratively \cite{Lin:2012la}. However, the amplification term of most stations in the USArray is very close to 1 \cite{Eddy:2013la}, so the their influence on the final result is minor.
 
 \subsubsection{Azimuthal Anisotropy}
+
+Several studies (e.g., Lin et al., 2011) have reported 1-2 \% of Rayleigh wave azimuthal anisotropy existing in the western and central US. The azimuthal anisotropy can be estimated by fitting the structural phase velocity with the wave propagation direction obtained in the slowness inversion. However, in this study, we stack the results from well distributed events to minimize the influence of azimuthal anisotropy, as there are not enough data yet in the east part of the array to perform this inversion. The azimuthal anisotropy inversion will be included in the future studies when the TA project is accomplished in the US continent.
 
 \subsubsection{Overtones Interference}
 
@@ -285,7 +293,6 @@ by assuming the first station has zero phase. Then the matrix $A$ is invertible,
 where $\tau$ is the relative phase delay of all the stations compare to the reference station. $\tau$ and the amplitude we measure in Section~\ref{sec:amp} can be used as input for the TPW method.
 
 \section{Conclusion}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{acknowledgments}
@@ -454,6 +461,12 @@ where $\tau$ is the relative phase delay of all the stations compare to the refe
 	\includegraphics[width=8.5cm]{pics/results/noise_hist.pdf}
 	\caption{20s Rayleigh and Love wave phase velocity comparison between earthquake and ambient noise measurement}
 	\label{fig:noise_hist}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/results/noise_comp_allband.pdf}
+	\caption{The mean values and standard deviations of the phase velocity difference between earthquake measurement (this study) and ambient noise measurement (Ekstr\"{o}m 2013) at different periods. Rayleigh wave results show good agreements between two studies while Love wave results indicate a systemic bias increasing with period.  }
+	\label{fig:noise_comp_allband}
 \end{figure}
 
 \begin{figure}
