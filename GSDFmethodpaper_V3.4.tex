@@ -1,0 +1,509 @@
+% gjilguid2e.tex
+% V2.0 released 1998 December 18
+% V2.1 released 2003 October 7 -- Gregor Hutton, updated the web address for the style files.
+
+\documentclass[referee]{gji}
+%\documentclass{gji}
+\usepackage{timet}
+\usepackage{graphicx}
+
+\title[Surface Wave Measurement Based on Cross-correlation]
+	{Surface Wave Measurement Based on Cross-correlation}
+\author[Ge Jin and James Gaherty]
+  {Ge Jin$^1$ and James Gaherty$^1$ \\
+  $^1$ Lamont-Doherty Earth Observatory, Columbia University
+  }
+%\date{Receiverd 2014 March}
+\date{}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}
+\volume{}
+\pubyear{2014}
+
+%\def\LaTeX{L\kern-.36em\raise.3ex\hbox{{\small A}}\kern-.15em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}
+%\def\LATeX{L\kern-.36em\raise.3ex\hbox{{\Large A}}\kern-.15em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}
+% Authors with AMS fonts and mssymb.tex can comment out the following
+% line to get the correct symbol for Geophysical Journal International.
+\let\leqslant=\leq
+
+\newtheorem{theorem}{Theorem}[section]
+
+\begin{document}
+
+\label{firstpage}
+
+\maketitle
+
+
+\begin{summary}
+	Summary of the GSDF paper
+\end{summary}
+
+\begin{keywords}
+	 surface wave tomography; phase velocity; automatic; USArray
+\end{keywords}
+
+\section{Introduction}
+
+Seismic surface waves represent one of the primary means for scientists to probe the structure of Earth's crust and upper mantle.  Surface waves provide direct constraints on both absolute velocity and relative velocity variations, and analysis of waves with different periods provides sensitivity to different depths.  These velocity variations in turn provide some of the best available constraints on a variety of geodynamic parameters, including absolute and relative variations in temperature (ref), crust and mantle composition, the presence or absence of fluid (melt) phases, and the distribution and orientation of flow-induced mineral fabric.  In many cases, however, resolution of these properties is limited by uncertainties in observed surface-wave velocities due to complexity in the seismic wavefield.  Because they sample the highly heterogeneous outer shell of the Earth, surface waves often contain waveform complexity caused by focusing and defocusing (often termed scattering or multipathing) that makes measurement of wave velocity uncertain (Fig.~\ref{fig:arraywaveform}). 
+
+In recent years, a number of investigators have developed data analysis schemes designed to more robustly estimate surface-wave velocities in the presence of multipathing \cite{Friederich:1995ce,Forsyth:2005aa,Yang:2006fc,Lin:2009fx,Lin:2011fw,Yang:2011sw}.  These techniques exploit arrays of seismic stations to better quantify the detailed character of the surface wavefield, specifically by combining measurements of both phase and amplitude between stations.  These observations can be modeled in the context of wavefield character, for example local plane-wave propagation direction (e.g. Forsyth \& Li 2005) or apparent velocities \cite{Lin:2009fx}, as well as the structural phase velocity or delay times associated with the underlying media. The techniques are particularly useful for estimating structural velocities in localized regions spanning a receiver array, as opposed to along the entire path from the source to the receiver employed in global (e.g. Levshin et al. 1992; Li and Romanowicz 1995; Ekstr\"{o}m et al. 1997) and some regional (e.g. Chen et al. 2007; Tape et al. 2010; Zhu et al. 2012) analyses.  The estimates of structural phase or group velocities across the array can then be inverted for models of seismic velocity through the crust and mantle beneath the array, with greater confidence and accuracy than when using phase information alone (e.g. Yang et al. 2011; Rau and Forsyth 2011; Lin et al. 2011).
+
+We have developed a new algorithm to accurately estimate structural phase velocities from broadband recordings of surface waves propagating across an array of receivers.  The analysis is based on the notion that waveform cross-correlation provides a highly precise and robust quantification of relative phase between two observed waveforms, if the waveforms are similar in character.  This notion is routinely exploited in body-wave analyses for structure (e.g. van Decar and Crosson, 1990) and source (e.g. Schaff and Beroza, 2004) characteristics, but it is not widely utilized in surface-wave analysis.  Our approach builds upon the Generalized Seismological Data Functional (GSDF) analysis of Gee \& Jordan \shortcite{Gee:1992ww}, which utilizes cross-correlation between observed and synthetic seismograms to quantify phase and amplitude behavior of any general seismic waveform, including surface waves \cite{Gaherty:1995ld,Gaherty:1996ss,Gaherty:2004sw,Chen:2007ft,Chen:2007f3}.  By applying this quantification to cross-correlation functions between surface waves observed at two nearby stations, we generate highly robust and precise estimates of relative phase between the stations, due to the similar nature of the recorded waveforms.  The procedure is applicable to arrays across a variety of scales, from the continental scale of EarthScope's USArray Transportable Array (TA), to the few 100's km spanned by a typical PASSCAL experiment, to 100's of meters in industry experiments, and is amenable to automated analyses with minimal analyst interaction.  The resulting delay times and associated amplitudes can be modeled in the context of both wave-propagation and structural velocities.  Here we outline the analysis, and demonstrate it's application to the TA array.   
+
+
+\section{Methodology}
+\subsection{Inter-station phase delays}
+\label{sec:gsdf}
+
+The methodology is based on the GSDF work flow presented by Gee and Jordan, \shortcite{Gee:1992ww}, and subsequently utilized for regional upper-mantle and crustal modeling (e.g. Gaherty and Jordan 1995; Gaherty et al 1996; Gaherty 2001, 2004; Chen et al. 2007b; Gaherty \& Dunn 2007).  In those analyses, the starting point consists of an observed broadband seismogram containing all seismic phases of interest, and a complete synthetic seismogram relative to which the phase delays and amplitude anomalies can be measured.  Here, we substitute a seismogram from a nearby station for the synthetic waveform, and measure phase and amplitude differences between phases of interest recorded at the two stations. Waveforms from these two stations are presented as $S_1$ and $S_2$ here (Fig.~\ref{fig:twostawaveform}). Because this is the first application of GSDF to an interstation analysis, we summarize the steps in some detail.  Gee and Jordan \shortcite{Gee:1992ww} provides a full theoretical presentation of GSDF. 
+
+
+The first step is to isolate the signal that we are interested in time domain. In the USArray application, we applied a window function $W_S$ that includes the primary surface wave (Rayleigh on vertical-component record, and Love on the transverse component) and most of its coda. Including the coda is useful, in that it is often highly correlated at stations within 1-2 wavelengths, as shown in Fig.~\ref{fig:twostawaveform}. We then calculate the cross-correlation function $C(t)$ (cross-correlagram) between $S_1$ and $W_SS_2$, defined as:
+\[
+C(t) = S_1 \star W_S S_2
+\]
+$C(t)$ contains the delay or lag information of all coherent signals, with the peak corresponding roughly to a wide-band group delay between the two stations, with a center frequency defined by the dominant energy in the data, typically around 30 mHz for teleseismic Rayleigh waves. We further isolate the dominant energy in the cross-correlation function in the time domain by applying a Hanning window around the peak of the cross-correlation function, producing $W_cC(t)$. The window function we applied here has a length of 200s.
+
+We then isolate the signals of interest in the frequency domain by convolving a sequence of Gaussian, narrow-band filters with $W_cC(t)$, forming a set of filtered correlagrams $F_i(\omega_i) \ast W_c C(t)$, where $F_i(\omega_i)$ corresponds to each filter at center frequency $\omega_i$ (Fig.~\ref{fig:cswaveform}). These filtered correlagrams provide information of the frequency-dependent group and phase delays between the two stations, as well as the coherence between the two signals. The frequency-dependent delays characterize the relative dispersion that has occurred along the ray path, and provide the fundamental data for determining the phase velocity characteristics of the wavefield and the structure being sampled.  In the application that presenting here, we are interested in characterizing the phase-velocity of fundamental-mode surface waves in the 10-50 mHz band, and so we apply a sequence of 8 narrow-band, zero-phase Gaussian filters with the band-width about 10\% of the center frequency.
+
+
+The narrow-band filtered cross-correlation function can be well approximated by a five-parameter wavelet which is the product of a Gaussian envelope and a cosine function:
+\[
+F_i \ast W_c C(t) \approx A Ga [\sigma(t-t_g)]cos[\omega(t-t_p)]
+\]
+\cite{Gee:1992ww}.  In this equation, $t_g$ and $t_p$ represent the frequency-dependent group and phase delays between the two stations, respectively, $Ga$ is the Gaussian function, $A$ is a positive scale factor, $\sigma$ is the half-bandwidth and $\omega$ is the center frequency of the narrow-band waveform.
+
+The raw phase and group delays can then be corrected for bias introduced by the time-domain windowing steps.  As pointed out by Gee and Jordan \shortcite{1992}, windowing of the wide-band cross-correlation function around its peak introduces a bias in the frequency-dependent phase delays that can be estimated as:
+\[
+\delta t_{err} = (1-\xi)\left[\frac{\omega_i - \omega_c}{\omega_i}\left(t_c - t_g(\omega_i)\right)\right]
+\]
+where $\xi$ is a time location parameter usually close to 1, $\omega_i$ is the frequency being measured, $\omega_c$ is the wide-band center frequency, $t_c$ is center of the window function, $t_g(\omega_i)$ is the group delay of frequency.  This bias can be significant for those frequencies that are much lower than the center frequency, but can be minimized by iterating on the windowing and filtering process.  In this study, for frequencies that are lower than 16mHz (60s), we utilize the initial estimate of tg to re-center the window function prior to narrow-band filtering these frequencies. This significantly reduces $\delta t_{err}$ thereby minimizing the bias correction.
+
+The raw phase delays are then checked and corrected for cycle-skipping.  This is a particular important problem for the higher-frequency observations, and/or for station pairs with relatively large source-receiver separation, for which the phase delay between the two stations may approach or exceed multiple times of the period of the observation, and the choice of cycle can be ambiguous. This problem is naturally avoided by only measuring the phase delay between the nearby station pairs. In the TA application, we only measure the station pair within 200km, which is less than 3 wavelength of the highest frequency band (50mHz). In most cases, a very rough estimation of reference phase velocity allows for unambiguous selection of the correct phase delay. 
+
+The window function $W_S$ may also introduce bias in the measurement, simply by altering the input seismograms at the edges of the window.  To account for this, we calculate the cross-correlation between $S_2$ and the isolation filter, $W_SS_2$.
+\[
+\tilde{C}(t) = S_2 \star W_sS_2
+\]
+\[
+F_i \ast W_c \tilde{C}(t) \approx \tilde{A} Ga [\tilde{\sigma}(t-\tilde{t_g})]cos[\tilde{\omega}(t-\tilde{t_p})]
+\]
+Since $S_2$ and $W_SS_2$ are similar within the window of interest, $\tilde{C}(t)$ is similar to the auto-correlation function of $W_S S_2$ with the group delay and phase delay close to zero. Any non-zero phase change measured in  corresponds to a delay associated with the windowing process, and by assuming that this windowing delay will be similar for the cross correlation $C(t)$, we calculate a final set of bias-corrected delay times:
+\[
+\delta \tau_p = t_p - \tilde{t}_p 
+\]
+\[
+\delta \tau_g = t_g - \tilde{t}_g
+\]
+
+We perform this analysis between a given station and several nearby stations – generally those within 200km.  Fig~\ref{fig:dtp} displays the raw phase delays for a representative event recorded across the transportable array. These observed variations are driven primarily by structural variations beneath the array, and they form the basis for inverting for phase-velocity variations across the array.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Wavefield amplitudes}
+\label{sec:amp}
+The associated amplitude of the surface wavefield is estimated using amplitude measurements performed on single station waveforms. We apply the five-parameter wavelet fitting to the windowed and narrow-band filtered auto-correlation function $\tilde{C}(t)$, which is defined as the cross-correlation between the isolation filter and the original waveform to generate the isolation filter. The scale factor $\tilde{A}$ of the wavelet is a good approximation of the power spectrum density function at center frequency of the narrow-band filter.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Derivation of apparent phase velocity}
+\label{sec:apv}
+
+For each earthquake and at each frequency, the apparent phase velocity of the wavefield across the array is defined by the Eikonal equation 
+\[
+\frac{1}{c'(\vec{r})} = |\nabla \tau(\vec{r})|
+\]
+where $\tau(\vec{r})$ is the phase travel time. Also called the dynamic phase velocity, $c'(r)$ is the reciprocal of travel time surface gradient, which is close to the structural phase velocity, but will likely be distorted by propagation effects such as multi-pathing, back-scattering, and focusing of the wavefront (e.g. Lin et al. 2009).  The collection of inter-station phase delays provides a large and well-distributed dataset for estimating the phase gradient via tomographic inversion. The phase difference between two nearby stations $\delta \tau_p$ can be described as:
+\[
+\delta \tau_p = \int\limits_{r_i} \vec{S}(\vec{r}) \cdot d\vec{r}
+\]
+where $\vec{S}(\vec{r})$ is the slowness vector and $\vec{r_i}$ is the great-circle path connecting the two stations. We invert for the two Cartesian components of the slowness distribution ($S_x$ and $S_y$) as a function of position across the array. $S_x$ and $S_y$ can be either positive or negative depending on the direction of wave propagation.  The inversion is stabilized using a smoothness constraint that minimizes the second gradient of $S_x$ and $S_y$. The error function being minimized can be presented as:
+\[
+\varepsilon_{c}^2 = \sum \left| \int\limits_{r_i} \vec{S}(\vec{r}) \cdot d\vec{r} - \delta \tau_{p_i}\right|^2 + \lambda \left( \sum |\nabla^2 S_x|^2 + \sum |\nabla^2 S_y|^2 \right)
+\]
+where the first term is the difference between observed and predicted phase delay, and $\lambda$ is the parameter controlling the smoothness. The upper left panel of Fig~\ref{fig:eventfig} presents the apparent (Eikonal) phase velocities determined from the $\delta \tau_p$ data presented in Fig~\ref{fig:dtp}.    
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Derivation of structural phase velocity}
+\label{sec:ampcor}
+
+The bias between apparent phase velocity and structure phase velocity can be corrected by adding amplitude measurements into the inversion, using an approximation to the Helmholtz equation \cite{Wielandt:1993ws,Lin:2011fw}:
+\[
+\frac{1}{c(\vec{r})} = \frac{1}{c'(\vec{r})} - 
+\frac{ \nabla^2 A(\vec{r})}{A(\vec{r}) \omega^2}
+\]
+Here $c(\vec{r})$ is the structural phase velocity and $A(\vec{r})$ is the amplitude field. The amplitude Laplacian term corrects for the influence of non-plane wave propagation on the apparent phase velocities, allowing for the recovery of the true structural phase velocity. Lin and Ritzwoller \shortcite{Lin:2011fw} applied this formulation to USArray data to explore the seismic structure of the western US.
+The input apparent phase velocity is derived as in section~\ref{sec:apv}.  For the amplitude term, we follow Lin and Ritzwoller \shortcite{Lin:2011fw} by fitting a minimum curvature amplitude surface to the single-station amplitude estimates from \ref{sec:amp}. The error function for the surface fitting is
+\[
+\varepsilon_{A}^2 = \sum_i\left|A(r_i)-A_i\right|^2 + \lambda\sum |\nabla^2 A(\vec{r})|^2 
+\]
+where $A_i$ is the observed station amplitude at location $r_i$, $A(r_i)$ is the interpolated amplitude estimated at $r_i$, and $\lambda$ controls the smoothing weight for the surface. In practice, calculating the second gradients of this amplitude surface is sometimes problematic, as the Laplacian operator magnifies high frequency noises, and individual amplitude measurements can be highly variable due to local site conditions and erroneous instrument responses \cite{Lin:2012la,Eddy:2013la}. We utilize a finite difference calculation to estimate these second derivatives numerically, after which we apply one more step of smoothing on the correction term to suppress the noise (See section\ref{sec:helm_dis} for more details).
+
+In the following section, we present the full application of this analysis to data from USArray. The analysis up through the calculation of structural phase velocity is done for individual events, and a range of frequencies.  For a fixed array geometry, the resulting phase-velocity maps from individual events are averaged (stacked) to produce phase velocity maps that can be used in a structural inversion for shear velocity.  In the case of a rolling array such as the TA, stacking and averaging over multiple events produces a single comprehensive phase velocity map that spans the history of the array deployment.   
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data Processing and Automation}
+\label{sec:data_processing}
+We applied our method on the data of USArray since 2006. The Software SOD \cite{Owens:2004sod} is used to download the seismic waveforms and remove the instrument response, and Matlab to apply the filter and cross-correlation operation.
+In the process of building up the program, we reduce the human inter-action as much as possible to minimize the subjectivity in the measurement.
+
+\subsection{Auto generation of isolation filter}
+As the first step of the whole process, a window function $W_s$ is selected to isolate the energy of fundamental mode surface wave. The desired $W_s$ should be large enough to include the arrivals at all frequencies, and small enough to eliminate the interference from other phases like the higher modes and the body waves. For each station, we estimate the group delays of all frequency bands using FTAN method \cite{Levshin:1992ve}, then define a window that includes these delay times plus 2 cycles before and 5 cycles after for each frequency. As the single station measurement can be highly variable, we collect the measurements from the whole array to regress a linear relation between the window function $W_s$ and epicenter distance, as:
+\[
+T_1 = \frac{L}{v_1} + t1
+\]
+\[
+T_2 = \frac{L}{v_2} + t2
+\]
+where $T_1$ and $T_2$ are the beginning and ending time of $W_S$, $L$ is the epicenter distance, and $v_1$, $v_2$, $t_1$, $t_2$ are parameters estimated by the linear regression.
+
+An example of automated window selection can be seen in Fig.~\ref{fig:arraywaveform}.
+
+\subsection{Auto selection of good measurements}
+
+We have designed three independent strategies to exclude unqualified phase measurements automatically at different stages of the data processing.
+
+We first use coherence of the waveforms between nearby stations as the most important factor to eliminate measurements from the dysfunctional or low SNR stations. Frequency dependent coherence can be estimated by comparing the amplitude of cross-correlation and two auto-correlation functions. Since we have already used five-parameter wavelet to estimate all these functions, it is convenient to use the fitting results. Coherence of a certain frequency band can be written as:
+\[
+\gamma = \frac{A_{12}^2}{\tilde{A}_{11}\tilde{A}_{22}}
+\]
+where $A_{12}$ is the amplitude of narrow-band cross-correlation wavelet, $A_{1}$  and $A_{2}$ are the amplitude of the narrow-band auto-correlation wavelet of the two stations estimated in the section~\ref{sec:amp}. In this study, we exclude all the measurement with the coherence lower than 0.6.
+
+The second round of selection comes after the phase delay measurements from all the station pairs are gathered. We estimate an average phase velocity at each frequency by linear fitting the phase delay with epicenter distance difference. Then the measurements with the misfit more than 10s from this linear regression are removed from the following process. 10s is a weak constrain, as most of the heterogeneities in US continent only produce the phase delay anomaly from the average phase velocity less than 5s within the range of 200km (Fig.~\ref{fig:dtp}). This simple treatment discards most of extreme measurements and thus stabilize the following Eikonal inversion.
+
+Finally, after the Eikonal inversion described in Section~\ref{sec:apv}, we reject the measurements with the inversion misfit larger than three standard deviations, and invert the slowness again. This step removes the inconsistent measurements and enhance the robustness of apparent phase velocity. 
+
+For the amplitude measurements, we discard the stations with the amplitude varying more than 30\% comparing to the median amplitude of their nearby stations ($<$200km).   
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Result}
+
+Based on the techniques described above, we developed an automated system to retrieve the surface wave phase velocity from USArray data. Once a week the system is activated to download the boardband waveforms of eligible earthquakes ($M_s > 6.0$, depth $<50$km), and process the data to generate tomography maps like shown in Fig.~\ref{fig:eventfig}. Then the structural phase velocity maps from individual earthquakes are weighted and summerized. The weighting of each pixel is based on the ray density in the slowness inversion (Section~\ref{sec:apv}).
+
+\subsection{Phase Velocity Maps}
+
+From 2006 to 2014, totally ??? cross-correlation measurements from ??? earthquakes are inverted for structure phase velocity of both Rayleigh wave and Love wave at 8 frequency bands. The Rayleigh wave result is shown in Fig.~\ref{fig:rayleigh_result}, and the Love wave result in Fig.~\ref{fig:love_result}. 
+
+Due to the various data length and quality, the number of events being stacked at each pixel may vary for different locations and frequencies. Only pixels averaging more than 10 measurements are shown in the maps.
+
+\subsection{Comparison with ambient noise results}
+\label{sec:noise_comp}
+
+Micro-seismic generated ambient noise has been used to retrieve high frequency surface wave phase velocity (e.g., Bensen et al. 2007), as the energy of surface wave excited by earthquake decreases exponentially at frequencies higher than 30mHz.  We here compare the phase velocity maps from this study at highest frequency band (50mHz) with the ambient noise model provided by Ekstrom \shortcite{Ekstrom:2013lr}. This ambient noise model is also the output of an automated system, which downloads the continuous waveform data, estimates and stacks the normalized coherence, retrieves the phase delay between station pairs in frequency domain \cite{Ekstrom:1997mg}, and regulates the phase velocity map using ray theory. The model is regularly updated and can be downloaded from the author’s website.
+
+Fig~\ref{fig:noise_comp} illustrates the comparison for both Rayleigh and Love wave at the period of 20s. We can see the results are highly consistent, despite they are retrieved from different seismic sources by using different phase measurement techniques and velocity inversions. Strong geological features are clearly high-lighted in both results, while the larger disagreements (Fig~\ref{fig:noise_comp}c and f) near the west coast and other strong velocity contrasts may be resulted from different smooth damping. 
+
+Fig.~\ref{fig:noise_hist} shows the statistic summary of this comparison. For Rayleigh wave, the correlation coefficient between the two maps is $0.94$. The mean of the velocity difference is $0.018$ km/s, and the standard deviation is $0.030$ km/s.  The small but systemic difference shows slightly higher velocities ($0.5\%$) from this study demonstrates the influence of the finite frequency effect, as the Helmholtz tomography allows for ray bending while conventional ray theory does not. 
+
+The Love wave results are usually less robust comparing to Rayleigh wave results because of the higher noise level existing in the horizontal components. Nevertheless, the correlation coefficient between the two studies is 0.89. The mean of the velocity difference for Love wave is $0.035$ km/s, and the standard deviation is $0.050$ km/s. A larger systemic difference is observed ($0.9\%$), which is almost twice the value of the difference in the Rayleigh wave results. 
+
+
+\subsection{Possible Source of Error}
+
+\subsubsection{Station Terms}
+
+Although the automated data selection techniques we described in Section~\ref{sec:data_processing} are able to eliminate most of the unqualified measurements with low signal-to-noise ratio, they cannot distinguish the stations with time-shift or strong amplification term, as the waveforms of those stations may still correlate well with their neighbors’. 
+
+The station time-shift can be generated from GPS disfunction or incorrect instrument response, which makes the timing of the station a bit earlier or later than the other stations. The time shifted stations can be distinguished in the apparent phase velocity maps by having two short-wavelength anomalies with reversed polarization before and after the station on the direction of wave propagation. Those stations can then be manually identified and excluded from the calculation. We do not perform this manual selection in this study because we want to demonstrate the result of a fully automated system. However, it is recommended for regional studies with less data and more requirement for detail structures.
+
+The station amplification term, on the other hand, is more unavoidable and its influence is less obvious comparing to the station time shift.  The amplitude correction we apply in Section~\ref{sec:ampcor} is based on the assumption that all the stations have the same amplification term, which is not perfect as the station amplification term can be affected by local geological structure and installation conditions. The ideal way to eliminate this bias is to estimate the station amplification term first by averaging multiple events \cite{Eddy:2013la}, or invert the phase velocity and amplification term iteratively \cite{Lin:2012la}. However, the amplification term of most stations in the USArray is very close to 1 \cite{Eddy:2013la}, so the their influence on the final result is minor.
+
+\subsubsection{Azimuthal Anisotropy}
+
+Several studies (e.g., Lin et al., 2011) have reported 1-2 \% of Rayleigh wave azimuthal anisotropy existing in the western and central US. The azimuthal anisotropy can be estimated by fitting the structural phase velocity with the wave propagation direction obtained in the slowness inversion. However, in this study, we stack the results from well distributed events to minimize the influence of azimuthal anisotropy, as there are not enough data yet in the east part of the array to perform this inversion. The azimuthal anisotropy inversion will be included in the future studies when the TA project is accomplished in the US continent.
+
+\subsubsection{Overtones Interference}
+
+\subsection{Spectrum Analysis of the Phase Maps}
+
+We apply the 2D Fourier transform separately on the western and eastern US to compare the geological active and stable parts of the continent. The Fourier Transform is performed in the sinusoidal map projections centered at ($40.5^\circ,-113^\circ$) and ($38^\circ,-90^\circ$) for eastern and western US respectively. The regions are defined in Fig.~\ref{fig:spectrum_analysis}a. We interpolate the empty spaces by using the minimum curvature surface technique. The amplitude spectra are shown in Fig.\ref{fig:spectrum_analysis}b, with only the structural wavelengths that are larger than the surface wave wavelengths being plotted to ensure the results are well above the resolution. 
+
+The amplitude spectra (Fig.\ref{fig:spectrum_analysis}b) indicate an increase of anomaly amplitude towards the longer structural wavelengths, which consists with the trend of the global observation at a larger scale \cite{Dziewonski:2010ma}. This observation also agrees with the commonsense that maintaining a strong anomaly (either compositional or thermal) within a short wavelength is usually difficult. 
+
+In the western US, the amplitude measured at the shorter periods are in general stronger, which may imply that more heterogeneous structure exists at the shallower depth. This trend is not very clear in the eastern US, as all the frequencies have similar amplitude at all wavelength. 
+
+\section{Discussion}
+
+\subsection{Improvement compare to FTAN method}
+
+In this section we would like to compare the phase measurement method developed in this study with the classical Frequency Time Analysis (FTAN) method developed by Levshin et al. \shortcite{Levshin:1992ve}. 
+
+FTAN method is widely used in many global or regional surface wave studies (e.g. Levshin et al. 1992; Levshin \& Ritzwoller 2001; Lin \& Ritzwoller 2011; Yang et al. 2011). This method applies a sequences of narrow-band filters to the raw seismograms, and retrieves the group delays by tracking the arrival time of the envelop function maximum at each frequency. The phase and amplitude measurements are made at these group delays for later tomographic inversion. Although theoretically the two methods extract the same information from the data, there are two major differences between them. 
+
+First, different techniques are used to retrieve phase information: we use the cross-correlation of coherent signals between stations, while FTAN method is based on the Hilbert transform of single station waveform. Cross-correlation can suppress the interference of random noise on the measurement, as it is not coherent among the stations. Here we build up a synthetic test to demonstrate the effect of random noise on both methods. A narrow band surface wave is simulated by a Gaussian enveloped cosine function propagating along a straight line. The group velocity of the wavelet (the velocity of Gaussian envelop) is 3.7km/s and the phase velocity is 4.0km/s. We add a normal distribute random noise with variance 20\% of the wavelet maximum amplitude to the data, and then measure the phase velocity between 500 station pairs 50km apart along the ray path using both methods. The result shows that under the same noise level, the misfit of cross-correlation measurement is significantly smaller (~50\%) than the misfit measured using FTAN (Fig.~\ref{fig:syntest})
+
+Second, the two methods are sensitive to different portion of data. FTAN method only samples the data at the point of group delay, where the surface wave has most energy. However, the selection of group delay can be difficult at higher frequencies, as multiple local maximums with similar amplitude may exist in the envelop function due to strong scatter effect and high noise level (Fig.~\ref{fig:highfscatter}). Each local maximum, or wavelet, represents a different propagation history. Thus selecting inconsistent wavelets through the array introduces bias into the later phase velocity inversion. In contrast, we cross-correlate the whole surface wave package as described in the section~\ref{sec:gsdf}, which includes the first arrival and the coda generated by the heterogeneity along the ray path. The phase measurement we get is the result of multi-pathing wavelets interference, which can be corrected by amplitude measurement. In practice, our method can retrieve robust phase velocity at the frequency as high as 50 mHz using earthquake data.
+
+Fig.~\ref{fig:eikonal_comp}a and b demonstrate the performance of these two methods on the phase measurement for a real earthquake. Fig.~\ref{fig:eikonal_comp}a is the reproduced apparent phase velocity of Rayleigh wave by following the strategy described in Lin \& Ritzwoller (2011). It is almost the same as the fig.4a in their paper, and the subtle difference is caused by a slightly different choice of smoothing factor. In the Fig.~\ref{fig:eikonal_comp}b we replace the FTAN measurement with ours while keep everything else the same as Fig.~\ref{fig:eikonal_comp}a. The difference between the two plots indicates that our method substantially reduces short wavelength noises in apparent phase velocity inversion, and provides more stable measurement at low amplitude stations compare to the FTAN method. 
+
+
+\subsection{Helmholtz Tomography}
+\label{sec:helm_dis}
+
+Another purpose of this study is to provide alternative ways to practice Eikonal and Helmholtz tomography developed by Lin et al. \shortcite{Lin:2009fx} and Lin and Ritzwoller \shortcite{Lin:2011fw}. 
+
+Since we measure the phase difference between the stations instead of absolute phase travel time at individual stations, it is not necessary to build a travel time surface $\tau(\vec{r})$ and then take its gradient to obtain apparent phase velocity. Instead, we prefer to invert the slowness vector components $S_x$ and $S_y$ directly as described in section~\ref{sec:apv}, which has several advantages. First, we can utilize the  well developed ray theory techniques to build up the inversion. Second, like conventional ray theory tomography, the ray density performs as a valuable parameter that quantitatively represents how well the inversion is constrained by the data. It can be used to determine the region with valid result and to weight the later stacking process. Finally, by putting the smoothing kernel directly on slowness instead of its integral (travel time), we gain better control on the smoothness of the desired variable: the slowness is allowed to vary smoothly, comparing to minimizing the gradient variation by fitting the travel time surface with minimum curvature. 
+
+Fig.~\ref{fig:eikonal_comp}b and c shows the result of two different kind of Eikonal tomography inversion using the same phase measurement. Comparing to Fig.~\ref{fig:eikonal_comp}b, Fig.~\ref{fig:eikonal_comp}c indicates that using our inversion, the short wave length noise is further suppressed while the amplitude of strong anomalies (e.g. Yellow Stone hot spot and Rocky Mountain) is maintained. This improvement has the potential to enhance the resolution of final result, though it is secondary comparing to the improvement we obtain from better phase measurement (Fig.~\ref{fig:eikonal_comp}). 
+
+To obtained the amplitude correction term is more challenging. First of all, the amplitude measurement is not as robust as the phase measurement. Both our method and the FTAN estimate the amplitude based on single station measurement, which is difficult to control the data qualify. Surface wave amplitude is also affected by local amplification and station term (ref). Moreover, the correction term  relies on the estimation of the amplitude field Laplacian term. Using finite difference to calculate the second order derivative of a surface at a certain location requires 9 to 16 adjoint data points, which triples the requirement to obtain the gradient. For an array setup like USArray with ~70km average station spacing, this restricts the resolution of the amplitude correction term to be lower than 140km \cite{Lin:2011fw}. Finally, fitting amplitude surface by minimizing its curvature does not guarantee the smoothness of its Laplacian term, as shown in Fig.~\ref{fig:amp_comp}b. Adding fourth order derivative minimization into the damping kernel to fit the amplitude surface was attempted, but no result improvement was observed.
+
+To partially resolve these difficulties, we adopt an approach that is similar to Lin \& Ritzwoller (2011). After retrieving the amplitude surface (Fig.~\ref{fig:amp_comp}a) and calculating the second derivative, a rough correction term is generated first (Fig.~\ref{fig:amp_comp}b). We then fit a minimum curvature surface again over this preliminary correction term, with a much larger damping factor to remove any variance with the wavelength shorter than the theoretical resolution (~140km for USArray), as shown in Fig.~\ref{fig:amp_comp}c. The smoothed correction term can then be applied to clean up the apparent phase velocity map. By comparing Fig.~\ref{fig:amp_comp}d and Fig.~\ref{fig:eikonal_comp}c, we can see that the bias caused by multi-pathing interference is significantly reduced and the anomalies agree with the geological structure better. 
+
+\subsection{Compatibility with the two-plane-wave method}
+The two-plane-wave (TPW) method (ref) is more conventional than Eikonal/Helmholtz Tomography method (ref) in the field of surface wave tomography. It has more advantages for small arrays with irregular station spacing.  The TPW method retrieves amplitude and phase information at individual stations using Fourier Transform, and requires the data with low quality to be manually discarded.  In this section, we provide a simple algorithm to convert the cross-correlation measurements into a format that can be used by the TPW method.
+
+The TPW method requires absolute phase or relative phase delay of all the stations compare to one reference station, while the cross-correlation measures the relative phase difference between the station pairs. Each phase difference measurement can be written as:
+\[
+\tau_i - \tau_j = \delta \tau_{ij}
+\]
+Where $tau_i$ and $tau_j$ represent the absolute phase at station i and j, and delta tau ij is the cross-correlation phase difference measurement we make in this study. To solve $tau_i$, we build a matrix formula $A\tau = \delta\tau$ as:
+\[ 
+\left( \begin{array}{cccc}
+1 & -1 & 0 & \cdots \\
+1 & 0 & -1 & \cdots \\
+0 & 1 & -1 & \cdots \\
+\vdots &\vdots &\vdots & \vdots
+\end{array} \right)
+\left( \begin{array}{c}
+	\tau_1 \\ 
+	\tau_2 \\
+	\tau_3 \\
+	\vdots
+\end{array} \right) = 
+\left( \begin{array}{c}
+	\delta \tau_{12} \\ 
+	\delta \tau_{13} \\
+	\delta \tau_{23} \\
+	\vdots
+\end{array} \right)  
+\] 
+
+Where the matrix $A$ on the left side is redundant but not full rank, as no absolute phase information of any station is given. At this point we need to add one more equation to the set:
+\[
+\tau_1 = 0
+\]
+by assuming the first station has zero phase. Then the matrix $A$ is invertible, and the problem can be solved by least square inversion:
+\[
+\tau = (A^TA)^{-1}A^T \delta\tau
+\]
+where $\tau$ is the relative phase delay of all the stations compare to the reference station. $\tau$ and the amplitude we measure in Section~\ref{sec:amp} can be used as input for the TPW method.
+
+\section{Conclusion}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{acknowledgments}
+	Some NSF fund\ldots 
+\end{acknowledgments}
+
+\begin{thebibliography}{}
+
+   \bibitem[\protect\citename{Bensen et al. }2007]{Bensen:2007ps}
+	   Bensen, G.D., Ritzwoller, M.H., Barmin, M.P., Levshin, A.L., Lin, F., Moschetti, M.P., Chapiro, N.M. \& Yang Y., 2007. Processing seismic ambient noise data to obtain reliable broad‐band surface wave dispersion measurements. \textit{\gjras}, \textbf{169}, 1239–1260. doi:10.1111/j.1365-246X.2007.03374.x
+
+   \bibitem[\protect\citename{Bodin \& Maupin }2008]{Bodin:2008jk}
+	   Bodin, T., \& Maupin, V., 2008. Resolution potential of surface wave phase velocity measurements at small arrays, \textit{\gji}, \textbf{172}, 698–706.
+
+   \bibitem[\protect\citename{Chen et al. }2010]{Chen:2010pk}
+	   Chen, P., Jordan, T.H., \& Lee, E.J., 2010. Perturbation kernels for generalized seismological data functionals (GSDF), \textit{\gji}, \textbf{183}, 869-883.
+
+   \bibitem[\protect\citename{Chen et al. }2007a]{Chen:2007ft}
+	   Chen, P., Jordan, T. H., \& Zhao, L., 2007. Full three‐dimensional tomography: a comparison between the scattering‐integral and adjoint‐wavefield methods, \textit{\gji}, \textbf{170}, 175-181.
+
+   \bibitem[\protect\citename{Chen et al. }2007b]{Chen:2007f3}
+	   Chen, P., Zhao, L., \& Jordan, T.H., 2007. Full 3D tomography for the crustal structure of the Los Angeles region, \textit{\bssa}, \textbf{97}, 1094-1120.
+
+   \bibitem[\protect\citename{Dziewo\'{n}ski et al. }2010]{Dziewonski:2010ma}
+	   Dziewo\'{n}ski, A.M., Lekic, V., \& Romanowicz, B.A., 2010. Mantle Anchor Structure: An argument for bottom up tectonics, \textit{\epsl}, \textbf{299}, 69–79. doi:10.1016/j.epsl.2010.08.013
+
+   \bibitem[\protect\citename{Eddy \& Ekstr\"{o}m}2013]{Eddy:2013la}
+	   Eddy, C. L. \& Ekstr\"{o}m G., 2013. Local ampliﬁcation of Rayleigh waves in the continental United States observed on the USArray, \textit{Earth Planet. Sci. Lett.}, in press, DOI: 10.1016/j.epsl.2014.01.013.
+
+   \bibitem[\protect\citename{Ekstr\"{o}m et al. }1997]{Ekstrom:1997mg}
+	   Ekstr\"{o}m, G., Tromp, J., \& Larson, E.W.F., 1997. Measurements and global models of surface wave propagation. \textit{\jgr}, \textbf{102}, 8137-8157. 
+
+   \bibitem[\protect\citename{Ekstr\"{o}m et al. }2013]{Ekstrom:2013lr}
+	   Ekstr\"{o}m, G., 2013. Love and Rayleigh phase-velocity maps, 5-40s, of the western and central USA from USArray data, \textit{\epsl}, \textbf{in press}.
+
+   \bibitem[\protect\citename{Forsyth \& Li }2005]{Forsyth:2005aa}
+	   Forsyth, D. W., \& Li, A., 2005. Array analysis of two-dimensional variations in surface wave phase velocity and azimuthal anisotropy in the presence of multipathing interference, \textit{Geophysical Monograph Series}, \textbf{157}, 81-97.
+
+   \bibitem[\protect\citename{Foster et al.}2014]{Foster:2014sw}
+	   Foster, A., Ekstr\"{o}m, G., Nettles, M., 2014. Surface-wave phase velocities of the western United States from a two-station method. \textit{\gji}, \textbf{196}, 1189–1206.
+
+   \bibitem[\protect\citename{Friederich \& Wielandt }1995]{Friederich:1995ce}
+   Friederich, W., \& Wielandt E., 1995. Interpretation of Seismic Surface Waves in Regional Networks: Joint Estimation of Wavefield Geometry and Local Phase Velocity. Method and Numerical Tests, \textit{\gjras}, \textbf{120}, 731-744.
+
+   \bibitem[\protect\citename{Gaherty }2001]{Gaherty:2001se}
+	   Gaherty, J.B., 2001. Seismic evidence for hotspot-induced buoyant flow beneath the Reykjanes Ridge, \textit{Science}, \textbf{293}, 1645-1647.
+
+   \bibitem[\protect\citename{Gaherty }2004]{Gaherty:2004sw}
+	   Gaherty, J.B., 2004. A surface wave analysis of seismic anisotropy beneath eastern North America, \textbf{\gji}, \textbf{158}, 1053-1066.
+
+   \bibitem[\protect\citename{Gaherty }2007]{Gaherty:2007eh}
+	   Gaherty, J.B., \& Dunn, R.A., 2007. Evaluating hot spot–ridge interaction in the Atlantic from regional‐scale seismic observations, \textit{Geochemistry, Geophysics, Geosystems}, \textit{8}.
+
+   \bibitem[\protect\citename{Gaherty \& Jordan }1995]{Gaherty:1995ld}
+	   Gaherty, J.B., \& Jordan, T.H., 1995. Lehmann discontinuity as the base of an anisotropic layer beneath continents, \textit{Science}, \textbf{268}, 1468-1471.
+
+   \bibitem[\protect\citename{Gaherty et al. }1996]{Gaherty:1996ss}
+	   Gaherty, J. B., Jordan, T. H., \& Gee, L. S. (1996). Seismic structure of the upper mantle in a central Pacific corridor, \textit{\jgr}, \textbf{101}, 22291-22309.
+
+   \bibitem[\protect\citename{Gee \& Jordan }1992]{Gee:1992ww}
+	   Gee, L.S., \& Jordan, T.H., 1992. Generalized seismological data functionals, \textit{\gji}, \textbf{111}, 363–390.
+
+%   \bibitem[\protect\citename{Goldstein et al. }2003]{Goldstein:2003sac}
+%	   Goldstein, P., Dodge, D., Firpo, M., \& Minner, L., 2003. 85.5 SAC2000: Signal processing and analysis tools for seismologists and engineers, \textit{International Geophysics}, \textbf{81}, 1613-1614.
+
+   \bibitem[\protect\citename{Levshin \& Ritzwoller }2001]{Levshin:2001ad}
+	   Levshin, A.L., \& Ritzwoller, M.H., 2001. Automated detection, extraction, and measurement of regional surface waves, \textit{Pure. appl. geophys.}, \textbf{158}, 1531-1545.
+
+   \bibitem[\protect\citename{Levshin et al. }1992]{Levshin:1992ve}
+	   Levshin, A., Ratnikova, L., \& Berger, J, 1992. Peculiarities of surface-wave propagation across central Eurasia, \textit{\bssa}, \textbf{82}, 2464–2493.
+
+   \bibitem[\protect\citename{Li \& Romanowicz }1996]{Li:1996gm}
+	   Li, X.D., \& Romanowicz, B, 1996. Global mantle shear velocity model developed using nonlinear asymptotic coupling theory, \textit{\jgr}, \textbf{101}, 22245-22272.
+
+   \bibitem[\protect\citename{Lin \& Ritzwoller }2011]{Lin:2011fw}
+	   Lin, F.C., \& Ritzwoller, M.H., 2011. Helmholtz surface wave tomography for isotropic and azimuthally anisotropic structure, \textit{\gji}, \textbf{186}, 1104–1120.
+
+   \bibitem[\protect\citename{Lin et al. }2009]{Lin:2009fx}
+	   Lin, F.C., Ritzwoller, M.H., \& Snieder, R., 2009. Eikonal tomography: surface wave tomography by phase front tracking across a regional broad-band seismic array, \textit{\gji}, \textbf{177}, 1091–1110. 
+
+   \bibitem[\protect\citename{Lin et al. }2012]{Lin:2012la}
+	   Lin, F.C., Tsai, V.C., \& Ritzwoller, M.H., 2012. The local amplification of surface waves: A new observable to constrain elastic velocities, density, and anelastic attenuation, \textit{\jgr}, \textbf{117}, B06302.
+
+   \bibitem[\protect\citename{Owens et al. }2004]{Owens:2004sod}
+	   Owens, T.J., Crotwell, H.P., Groves, C., \& Oliver-Paul, P., 2004. SOD: Standing order for data, \textit{Seism. Res. Lett.}, \textbf{75}, 515-520.
+
+   \bibitem[\protect\citename{Rau \& Forsyth }2011]{Rau:2011mm}
+	   Rau, C. J., \& Forsyth, D.W., 2011. Melt in the mantle beneath the amagmatic zone, southern Nevada, \textit{Geology}, \textbf{39}, 975-978.
+
+   \bibitem[\protect\citename{Schaff \& Beroza }2004]{Schaff:2004cp}
+	   Schaff, D.P., \& Beroza, G.C., 2004. Coseismic and postseismic velocity changes measured by repeating earthquakes, \textit{\jgr}, \textbf{109}.
+
+   \bibitem[\protect\citename{Tape et al. }2010]{Tape:2010st}
+	   Tape, C., Liu, Q., Maggi, A., \& Tromp, J, 2010. Seismic tomography of the southern California crust based on spectral‐element and adjoint methods, \textit{\gji}, \textbf{180}, 433-462.
+
+   \bibitem[\protect\citename{VanDecar \& Crosson }1990]{VanDecar:1990dt}
+	   VanDecar, J.C., \& Crosson, R.S., 1990. Determination of teleseismic relative phase arrival times using multi-channel cross-correlation and least squares, \textit{\bssa}, \textbf{80}, 150-169.
+
+   \bibitem[\protect\citename{Wielandt }1993]{Wielandt:1993ws}
+	   Wielandt, E., 1993. Propagation and Structural Interpretation of Non‐Plane Waves, \textit{\gji}, \textbf{113}, 45–53.
+
+   \bibitem[\protect\citename{Yang \& Forsyth }2006]{Yang:2006fc}
+	   Yang, Y., \& Forsyth, D. W., 2006. Regional tomographic inversion of the amplitude and phase of Rayleigh waves with 2-D sensitivity kernels, \textit{\gji}, \textbf{166}, 1148-1160.
+
+   \bibitem[\protect\citename{Yang et al. }2011]{Yang:2011sw}
+	   Yang, Y., Shen, W., \& Ritzwoller, M.H., 2011. Surface wave tomography on a large-scale seismic array combining ambient noise and teleseismic earthquake data, \textit{Earthquake Science}, \textbf{24}, 55-64.
+
+   \bibitem[\protect\citename{Zhu et al. }2012]{Zhu:2012st}
+	   Zhu, H., Bozda\v{g}, E., Peter, D., \& Tromp, J., 2012. Structure of the European upper mantle revealed by adjoint tomography, \textit{Nature Geoscience}, \textbf{5}, 493-498.
+
+\end{thebibliography}
+
+%% Introduction
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/arraywaveform/200901181411_LHZ_waveform.pdf}	
+	\caption{USarray vertical component records for the January 18th, 2009 earthquake near Kermadec Islands, New Zealand (Mw=6.4). Red lines show the window function $W_S$ to isolate the fundamental Rayleigh wave energy, which is automatically generated. The length and amplitude variation of coda demonstrates the scattering caused by local heterogeneities.}
+	\label{fig:arraywaveform}
+\end{figure}
+
+%% Methodology
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/sta_waveforms.pdf}
+	\caption{Two sample waveforms of the same earthquake as in Fig.\ref{fig:arraywaveform} from station W17A ($S_1$) and W18A ($S_2$). The two stations are 89km apart and the waveforms are almost identical. The lower panel shows the windowed waveform to isolate the energy of fundamental Rayleigh wave.}
+	\label{fig:twostawaveform}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/cs_waveforms.pdf}
+	\caption{Crossgrams of the waveforms in Fig.~\ref{fig:twostawaveform}. From top to bottom panels demonstrate the processing procedures described in the Methodology section: cross-correlating the waveforms from the two stations, windowing the cross-correlagrams, narrow-band filtering, and fitting a five-parameter wavelet. The narrow-band filter applied has a center frequency of 25mHz.}
+	\label{fig:cswaveform}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/dtp_plot.pdf}
+	\caption{Rayleigh Wave phase delay against epicenter distance difference of all the station pairs within 200km for the same earthquake as in Fig.\ref{fig:arraywaveform}. From warm to cold, different color crosses indicate the measurement at frequencies from lower to higher. An increasing move-out at lower frequencies can be observed due to the dispersion. }
+	\label{fig:dtp}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=17cm]{pics/event_phv/eventplot.pdf}
+	\caption{The 40s Rayleigh wave results for two earthquakes. \textbf{a)} The apparent phase velocity map derived from phase delay measurement (Fig.~\ref{fig:dtp}) for the same earthquake as shown in Fig.\ref{fig:arraywaveform}. \textbf{b)} The corrected phase velocity map derived from a) and c) using Helmholtz equation. \textbf{c)} The amplitude map. \textbf{d)} The wave propagation direction anomaly map. The arrows point in the real propagation direction while the color contour illustrates the angle differ from the great circle path. The rotation of arrows is exaggerated for demostration. \textbf{e)}-\textbf{h)} Same as a)-d) but for the April 7, 2009 earthquake near Kuril Islands ($M_s=6.8$).}
+	\label{fig:eventfig}
+\end{figure}
+
+%% Results
+
+\begin{figure}
+	\includegraphics[width=17cm]{pics/results/rayleigh_result.pdf}
+	\caption{Rayleigh wave phase vocity maps}
+	\label{fig:rayleigh_result}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=17cm]{pics/results/love_result.pdf}
+	\caption{Love wave phase vocity maps}
+	\label{fig:love_result}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=17cm]{pics/results/noise_20_comp.pdf}
+	\caption{20s Rayleigh and Love wave phase velocity comparison between earthquake and ambient noise measurement}
+	\label{fig:noise_comp}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/results/noise_hist.pdf}
+	\caption{20s Rayleigh and Love wave phase velocity comparison between earthquake and ambient noise measurement}
+	\label{fig:noise_hist}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/results/noise_comp_allband.pdf}
+	\caption{The mean values and standard deviations of the phase velocity difference between earthquake measurement (this study) and ambient noise measurement (Ekstr\"{o}m 2013) at different periods. Rayleigh wave results show good agreements between two studies while Love wave results indicate a systemic bias increasing with period.  }
+	\label{fig:noise_comp_allband}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/results/spectrum_analysis.pdf}
+	\caption{2D Fourier analysis of the phase velocity maps for Rayleigh Wave. a) Regions that being analysed. b) Amplitude spectra against the structural wavelength at different frequency bands. Only the structural wavelengths that are larger than the surface wave wavelength are plotted here. }
+	\label{fig:spectrum_analysis}
+\end{figure}
+
+%% Discussion
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/gsdfvsftan/gsdfvsftan.pdf}
+	\caption{Comparison between our method and FTAN method in a 1D synthetic test. Left panel:the misfit histogram of our method for 200 individual measurements with 20\% noise. Right panel: the misfit of FTAN measurement on the same dataset.}
+	\label{fig:syntest}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{pics/two_sta_waveform/highfscatter.pdf}
+	\caption{Station 327A vertical component of the same earthquake as in Fig.~\ref{fig:arraywaveform}. Upper panel: the original waveform filtered from 5 mHz to 100 mHz. Middle and lower panels: narrow-band filtered waveform with center frequency at 50 mHz and 25 mHz respectively. Thick dash lines are the envelop functions and vertical thin lines show the location of isolation window function $W_S$. FTAN method is difficult to make measurements at high frequencies as the selection of group delay can be controversial.}
+	\label{fig:highfscatter}
+\end{figure}
+
+\begin{figure*}
+	\includegraphics[width=17cm]{pics/eikonal_test/eikonal_comp.pdf}
+	\caption{60s Rayleigh wave Eikonal tomography results using different phase measurement methods and Eikonal tomography inversions for the April 7, 2009 earthquake near Kuril Islands ($M_s$=6.8). We select the same earthquake as shown in fig. 3a of Lin and Ritzwoller (2011) for comparison. a) Phase velocity obtained by using the FTAN phase measurement, and taking travel-time surface gradient. b) Same as a) but using cross-correlation phase measurement. c) Same as b) but phase velocity is obtained by inversing slowness vector.}
+	\label{fig:eikonal_comp}
+\end{figure*}
+
+\begin{figure*}
+	\includegraphics[width=17cm]{pics/eikonal_test/amplitude_comp.pdf}
+	\caption{Demostration of the amplitude correction process on the apparent phase velocity map in Fig.~\ref{fig:eikonal_comp}c. \textbf{a)} The amplitude map generated by fitting minimum curvature surface. \textbf{b)} The preliminary correction term derived from a). \textbf{c)} The smoothed correction term. \textbf{d)} The corrected phase velocity map, derived from c) and Fig.~\ref{fig:eikonal_comp}c. }
+	\label{fig:amp_comp}
+\end{figure*}
+
+
+
+
+\label{lastpage}
+
+
+\end{document}
