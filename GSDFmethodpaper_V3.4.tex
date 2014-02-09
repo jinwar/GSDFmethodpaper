@@ -46,7 +46,7 @@
 
 \section{Introduction}
 
-Seismic surface waves represent one of the primary means for scientists to probe the structure of Earth's crust and upper mantle.  Surface waves provide direct constraints on both absolute velocity and relative velocity variations, and analysis of waves with different periods provides sensitivity to different depths.  These velocity variations in turn provide some of the best available constraints on a variety of geodynamic parameters, including absolute and relative variations in temperature (ref), crust and mantle composition, the presence or absence of fluid (melt) phases, and the distribution and orientation of flow-induced mineral fabric.  In many cases, however, resolution of these properties is limited by uncertainties in observed surface-wave velocities due to complexity in the seismic wavefield.  Because they sample the highly heterogeneous outer shell of the Earth, surface waves often contain waveform complexity caused by focusing and defocusing (often termed scattering or multipathing) that makes measurement of wave velocity uncertain (Fig.~\ref{fig:arraywaveform}). 
+Seismic surface waves represent one of the primary means for scientists to probe the structure of Earth's crust and upper mantle.  Surface waves provide direct constraints on both absolute velocity and relative velocity variations, and analysis of waves with different periods provides sensitivity to different depths.  These velocity variations in turn provide some of the best available constraints on a variety of geodynamic parameters, including absolute and relative variations in temperature, crust and mantle composition, the presence or absence of fluid (melt) phases, and the distribution and orientation of flow-induced mineral fabric.  In many cases, however, resolution of these properties is limited by uncertainties in observed surface-wave velocities due to complexity in the seismic wavefield.  Because they sample the highly heterogeneous outer shell of the Earth, surface waves often contain waveform complexity (Fig.~\ref{fig:arraywaveform}) caused by focusing and defocusing (often termed scattering or multipathing) that makes measurement of wave velocity uncertain. 
 
 In recent years, a number of investigators have developed data analysis schemes designed to more robustly estimate surface-wave velocities in the presence of multipathing \cite{Friederich:1995ce,Forsyth:2005aa,Yang:2006fc,Lin:2009fx,Lin:2011fw,Yang:2011sw}.  These techniques exploit arrays of seismic stations to better quantify the detailed character of the surface wavefield, specifically by combining measurements of both phase and amplitude between stations.  These observations can be modeled in the context of wavefield character, for example local plane-wave propagation direction (e.g. Forsyth \& Li 2005) or apparent velocities \cite{Lin:2009fx}, as well as the structural phase velocity or delay times associated with the underlying media. The techniques are particularly useful for estimating structural velocities in localized regions spanning a receiver array, as opposed to along the entire path from the source to the receiver employed in global (e.g. Levshin et al. 1992; Li and Romanowicz 1995; Ekstr\"{o}m et al. 1997) and some regional (e.g. Chen et al. 2007; Tape et al. 2010; Zhu et al. 2012) analyses.  The estimates of structural phase or group velocities across the array can then be inverted for models of seismic velocity through the crust and mantle beneath the array, with greater confidence and accuracy than when using phase information alone (e.g. Yang et al. 2011; Rau and Forsyth 2011; Lin et al. 2011).
 
@@ -183,12 +183,6 @@ For the amplitude measurements, we discard the stations with the amplitude varyi
 
 Based on the techniques described above, we developed an automated system to retrieve the surface wave phase velocity from USArray data. Once a week the system is activated to download the boardband waveforms of eligible earthquakes ($M_s > 6.0$, depth $<50$km), and process the data to generate tomography maps like shown in Fig.~\ref{fig:eventfig}. Then the structural phase velocity maps from individual earthquakes are weighted and summerized. The weighting of each pixel is based on the ray density in the slowness inversion (Section~\ref{sec:apv}).
 
-\subsection{Phase Velocity Maps}
-
-From 2006 to 2014, totally ??? cross-correlation measurements from ??? earthquakes are inverted for structure phase velocity of both Rayleigh wave and Love wave at 8 frequency bands. The Rayleigh wave result is shown in Fig.~\ref{fig:rayleigh_result}, and the Love wave result in Fig.~\ref{fig:love_result}. 
-
-Due to the various data length and quality, the number of events being stacked at each pixel may vary for different locations and frequencies. Only pixels averaging more than 10 measurements are shown in the maps.
-
 \subsection{Comparison with ambient noise results}
 \label{sec:noise_comp}
 
@@ -219,19 +213,23 @@ Several studies (e.g., Lin et al., 2011) have reported 1-2 \% of Rayleigh wave a
 \subsubsection{Overtones Interference}
 \label{sec:overtone}
 
-# Overtunes Interference
+We do not observe any significant effect of higher modes interference on the Rayleigh wave phase velocity maps, as no significant bias is found between the earthquake and ambient noise results (Fig.~\ref{fig:noise_comp_allband}). The source of ambient noise is usually believed to be shallow, and therefore the energy of overtones is relatively smaller in the ambient noise waveforms than in the real earthquake waveforms. If we assume that the ambient noise result is overtone-free, the consistence between the earthquake and ambient noise result for Rayleigh wave indicates the effect of overtones interference is small.
 
-We do not observe any significant effect of higher modes interference on the Rayleigh wave phase velocity maps, as no significant bias is found between the earthquake and ambient noise results (Fig.~\ref{fig:noise_comp_allband). The source of ambient noise is usually believed to be shallow, and therefore the energy of overtones is relatively smaller in the ambient noise waveforms than in the real earthquake waveforms. If we assume that the ambient noise result is overtone-free, the consistence between the earthquake and ambient noise result for Rayleigh wave indicates the effect of overtones interference is small.
-
-For Love wave, the overtones interference affects the phase measurement more significantly than for Rayleigh wave, as the group velocity difference between the Love wave fundamental mode and overtones is smaller. Although we choose only the shallow events ($<$50 km) to be measured as they excite less overtones energy, the comparison between the earthquake and the ambient noise results still shows a significant frequency depended systemic bias (Fig.~\ref{fig:noise_comp_allband).
+For Love wave, the overtones interference affects the phase measurement more significantly than for Rayleigh wave, as the group velocity difference between the Love wave fundamental mode and overtones is smaller. Although we choose only the shallow events ($<$50 km) to be measured as they excite less overtones energy, the comparison between the earthquake and the ambient noise results still shows a significant frequency depended systemic bias (Fig.~\ref{fig:noise_comp_allband}).
 
 Foster et al. \shortcite{Foster:2014sw} reported a systemic higher phase velocity obtained from mini-array method (similar to Eikonal tomography) than from the long-path two-station method. The bias they found for the 50-s Love wave has the similar magnitude as the bias we observed for the 40-s Love wave. A follow-up study \cite{Foster:2014oi} suggested that the overtones interference affects the methods estimating local gradient more than the methods using longer ray paths, and the bias generated by this influence can be systemic.
 
-The group velocities of Love wave fundamental and first mode behave differently in the oceanic structure and in the continental structure \cite{Nettle:2011}. In the ocean, these two modes propagates at very similar speed, so it is difficult to distinguish them in time. In the continent, on the other hand, the group velocity of fundamental mode drops dramatically at higher frequencies ($>$20MHz), while the first mode group velocity reminds almost unchanged. In general, for the continental stations, the time difference between the fundamental and overtones’ group delays is larger at higher frequencies, so less overtones interference will affect the phase measurement. This explains the observation in Fig.~\ref{fig:noise_comp_allband}, with the bias between earthquake and ambient noise results increase with frequencies. 
+The group velocities of Love wave fundamental and first mode behave differently in the oceanic structure and in the continental structure \cite{Nettles:2011}. In the ocean, these two modes propagates at very similar speed, so it is difficult to distinguish them in time. In the continent, on the other hand, the group velocity of fundamental mode drops dramatically at higher frequencies ($>$20MHz), while the first mode group velocity reminds almost unchanged. In general, for the continental stations, the time difference between the fundamental and overtones’ group delays is larger at higher frequencies, so less overtones interference will affect the phase measurement. This explains the observation in Fig.~\ref{fig:noise_comp_allband}, with the bias between earthquake and ambient noise results increase with frequencies. 
 
-Besides frequency, the among of the phase velocity bias affected by overtones interference also depends on how the phase is measured. When applying the window function on the original waveform to isolate the surface wave energy, the methods that apply different window functions at different frequency bands (e.g. Levshin et al. 1992, Ekstr\"{o}m et al. 1997) is less biased at higher frequencies ($>$25mHz) than the methods that use the same window function at all frequencies (e.g., this study, Forsyth \& Li 2005). However, as the group delay between the fundamental mode and higher modes becoming closer and the envelop of the wavelets becoming boarder at lower frequencies, all the methods are affected and biased.
+Besides frequency, how the phase being measured will also determines the among of this bias. In general, when applying the window function on the original waveform to isolate the surface wave energy, the methods that apply different window functions at different frequency bands (e.g. Levshin et al. 1992, Ekstr\"{o}m et al. 1997) is less biased at higher frequencies ($>$25mHz) than the methods that use the same window function at all frequencies (e.g., this study, Forsyth \& Li 2005). However, as the group delay between the fundamental mode and higher modes becoming closer and the envelop of the wavelets becoming boarder at lower frequencies, all the methods are affected and biased.
 
 Because the Love wave results are contemned by overtones interference and hence have systemic bias, they are not shown in this paper. The effect of overtones interference on the Love wave phase velocity results will be further investigated, yet it is beyond the scope of this study.
+
+\subsection{Phase Velocity Maps}
+
+From 2006 to 2014, totally ??? cross-correlation measurements from ??? earthquakes are inverted for structure phase velocity of both Rayleigh wave and Love wave at 8 frequency bands. The Rayleigh wave result is shown in Fig.~\ref{fig:rayleigh_result}. The result of Love wave is calculated but not shown in this study because of the overtones interference. 
+
+Due to the various data length and quality, the number of events being stacked at each pixel may vary for different locations and frequencies. Only pixels averaging more than 10 measurements are shown in the maps.
 
 \subsection{Spectrum Analysis of the Phase Maps}
 
@@ -265,12 +263,12 @@ Since we measure the phase difference between the stations instead of absolute p
 
 Fig.~\ref{fig:eikonal_comp}b and c shows the result of two different kind of Eikonal tomography inversion using the same phase measurement. Comparing to Fig.~\ref{fig:eikonal_comp}b, Fig.~\ref{fig:eikonal_comp}c indicates that using our inversion, the short wave length noise is further suppressed while the amplitude of strong anomalies (e.g. Yellow Stone hot spot and Rocky Mountain) is maintained. This improvement has the potential to enhance the resolution of final result, though it is secondary comparing to the improvement we obtain from better phase measurement (Fig.~\ref{fig:eikonal_comp}). 
 
-To obtained the amplitude correction term is more challenging. First of all, the amplitude measurement is not as robust as the phase measurement. Both our method and the FTAN estimate the amplitude based on single station measurement, which is difficult to control the data qualify. Surface wave amplitude is also affected by local amplification and station term (ref). Moreover, the correction term  relies on the estimation of the amplitude field Laplacian term. Using finite difference to calculate the second order derivative of a surface at a certain location requires 9 to 16 adjoint data points, which triples the requirement to obtain the gradient. For an array setup like USArray with ~70km average station spacing, this restricts the resolution of the amplitude correction term to be lower than 140km \cite{Lin:2011fw}. Finally, fitting amplitude surface by minimizing its curvature does not guarantee the smoothness of its Laplacian term, as shown in Fig.~\ref{fig:amp_comp}b. Adding fourth order derivative minimization into the damping kernel to fit the amplitude surface was attempted, but no result improvement was observed.
+To obtained the amplitude correction term is more challenging. First of all, the amplitude measurement is not as robust as the phase measurement. Both our method and the FTAN estimate the amplitude based on single station measurement, which is difficult to control the data qualify. Surface wave amplitude is also affected by local amplification and station term \cite{Lin:2012la,Eddy:2013la}. Moreover, the correction term  relies on the estimation of the amplitude field Laplacian term. Using finite difference to calculate the second order derivative of a surface at a certain location requires 9 to 16 adjoint data points, which triples the requirement to obtain the gradient. For an array setup like USArray with ~70km average station spacing, this restricts the resolution of the amplitude correction term to be lower than 140km \cite{Lin:2011fw}. Finally, fitting amplitude surface by minimizing its curvature does not guarantee the smoothness of its Laplacian term, as shown in Fig.~\ref{fig:amp_comp}b. Adding fourth order derivative minimization into the damping kernel to fit the amplitude surface was attempted, but no result improvement was observed.
 
 To partially resolve these difficulties, we adopt an approach that is similar to Lin \& Ritzwoller (2011). After retrieving the amplitude surface (Fig.~\ref{fig:amp_comp}a) and calculating the second derivative, a rough correction term is generated first (Fig.~\ref{fig:amp_comp}b). We then fit a minimum curvature surface again over this preliminary correction term, with a much larger damping factor to remove any variance with the wavelength shorter than the theoretical resolution (~140km for USArray), as shown in Fig.~\ref{fig:amp_comp}c. The smoothed correction term can then be applied to clean up the apparent phase velocity map. By comparing Fig.~\ref{fig:amp_comp}d and Fig.~\ref{fig:eikonal_comp}c, we can see that the bias caused by multi-pathing interference is significantly reduced and the anomalies agree with the geological structure better. 
 
 \subsection{Compatibility with the two-plane-wave method}
-The two-plane-wave (TPW) method (ref) is more conventional than Eikonal/Helmholtz Tomography method (ref) in the field of surface wave tomography. It has more advantages for small arrays with irregular station spacing.  The TPW method retrieves amplitude and phase information at individual stations using Fourier Transform, and requires the data with low quality to be manually discarded.  In this section, we provide a simple algorithm to convert the cross-correlation measurements into a format that can be used by the TPW method.
+The two-plane-wave (TPW) method \cite{Forsyth:2005aa} is more conventional than Eikonal/Helmholtz Tomography method \cite{Lin:2009fx,Lin:2011fw} in the field of surface wave tomography. It has more advantages for small arrays with irregular station spacing.  The TPW method retrieves amplitude and phase information at individual stations using Fourier Transform, and requires the data with low quality to be manually discarded.  In this section, we provide a simple algorithm to convert the cross-correlation measurements into a format that can be used by the TPW method.
 
 The TPW method requires absolute phase or relative phase delay of all the stations compare to one reference station, while the cross-correlation measures the relative phase difference between the station pairs. Each phase difference measurement can be written as:
 \[
@@ -309,6 +307,19 @@ by assuming the first station has zero phase. Then the matrix $A$ is invertible,
 where $\tau$ is the relative phase delay of all the stations compare to the reference station. $\tau$ and the amplitude we measure in Section~\ref{sec:amp} can be used as input for the TPW method.
 
 \section{Conclusion}
+
+In this study, we describe in detail about the new method to measure the surface wave phase velocity. This method is based on the cross-correlation of the waveforms from nearby stations to obtain the phase difference. We find the cross-correlation measurement is more robust than the conventional FTAN measurement with the existence of random noise.
+
+The phase difference and amplitude measurements are inverted for the phase velocity using Helmholtz equation. With the coherence and other data quality estimations serving as selection criteria, we are able to build an automated system that retrieve phase velocity maps directly from seismic raw data without any human interaction. We tested this system on the USArray data and provide robust and up-to-date phase velocity maps for Rayleigh wave.
+
+The Love wave result is also calculated. However, we find that the overtones interference generates systemic bias in the Love wave phase velocity result. Further study is under-going to investigate this effect.
+
+The Rayleigh wave phase velocity maps show interesting contrast between the tectonic active western and tectonic stable eastern US. This contrast implies the different amount of effect on the shear velocity structure by the temperature variation (short-term) and the composition variation (long-term).
+
+The phase velocity maps presented in this study are available at: https://www.ldeo.columbia.edu/~ge.jin/projects/USarray.html. The Matlab code of the automated surface wave measuring system (ASWMS) is available at https://github.com/jinwar/matgsdf.
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{acknowledgments}
@@ -467,11 +478,11 @@ where $\tau$ is the relative phase delay of all the stations compare to the refe
 	\label{fig:rayleigh_result}
 \end{figure}
 
-\begin{figure}
-	\includegraphics[width=17cm]{pics/results/love_result.pdf}
-	\caption{Love wave phase vocity maps}
-	\label{fig:love_result}
-\end{figure}
+%\begin{figure}
+%	\includegraphics[width=17cm]{pics/results/love_result.pdf}
+%	\caption{Love wave phase vocity maps}
+%	\label{fig:love_result}
+%\end{figure}
 
 \begin{figure}
 	\includegraphics[width=17cm]{pics/results/noise_20_comp.pdf}
